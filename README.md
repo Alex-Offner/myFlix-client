@@ -1,0 +1,2 @@
+<h1> myFlix Client-Side</h1>
+<p>This project focuses on the client-side of my movie app. It relys on the movie_app with server-side coded REST API and database. It will be build using React and organised using Parcel.<p>
