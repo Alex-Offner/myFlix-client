@@ -1,4 +1,13 @@
 .my-flix {
   color: steelblue;
 }
+
+.movie-img {
+  max-width: 10%;
+  height: auto;
+}
+
+.headline {
+  font-weight: bold;
+}
 /*# sourceMappingURL=index.ed40eb2d.css.map */
