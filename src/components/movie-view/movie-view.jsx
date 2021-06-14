@@ -57,7 +57,7 @@ MovieView.propTypes = {
         }).isRequired,
         Drama: PropTypes.shape({
             Name: PropTypes.string
-        }).isRequired
+        })
     }).isRequired,
     onBackClick: PropTypes.func.isRequired
 };
