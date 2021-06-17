@@ -51,14 +51,13 @@ export class MainView extends React.Component {
         })
     }
 
-
     render() {
         //object destruction for const movies = this.state.movies
         const { movies, selectedMovie, user, registered } = this.state;
 
-        if (!registered) return <RegistrationView onRegistered={registered => this.onRegistered(registered)} />;
+        if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} onRegistered={registered => this.onRegistered(registered)} />;
 
-        if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
+        if (!registered) return <RegistrationView onRegistered={registered => this.onRegistered(registered)} onLoggedIn={user => this.onLoggedIn(user)} />;
 
         if (movies.length === 0) return <div className="main-view" />;
 

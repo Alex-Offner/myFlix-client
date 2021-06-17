@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import './login-view.scss';
+import PropTypes from 'prop-types';
 
 export function LoginView(props) {
     const [username, setUsername] = useState('');
@@ -8,13 +10,16 @@ export function LoginView(props) {
         e.preventDefault();
         console.log(username, password);
         props.onLoggedIn(username);
+        props.onRegistered(username);
     };
 
-    const SignUp = (e) => {
+    const moveToSignUp = (e) => {
         e.preventDefault();
-        console.log('Moving to Registration');
-        //props.moveToRegistration();
+        console.log('Moving to registration!');
+        props.onLoggedIn(true);
+        props.onRegistered(null);
     }
+
 
     return (
         <form>
@@ -28,7 +33,12 @@ export function LoginView(props) {
             </label>
             <button type="submit" onClick={handleSubmit}>Submit</button>
             <p>or register here</p>
-            <button type="submit" onClick={SignUp}>Sign Up</button>
+            <button onClick={moveToSignUp}>Sign Up</button>
         </form>
     );
 }
+
+LoginView.propTypes = {
+    onRegistered: PropTypes.func.isRequired,
+    onLoggedIn: PropTypes.func.isRequired
+};
