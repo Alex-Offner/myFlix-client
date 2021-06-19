@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './movie-view.scss';
+import Button from 'react-bootstrap/Button';
 
 export class MovieView extends React.Component {
 
@@ -40,7 +42,7 @@ export class MovieView extends React.Component {
                     <span className="headline">Genre: </span>
                     <span className="genre-name">{movie.Genre.Name}</span>
                 </div>
-                <button onClick={() => { onBackClick(null); }}>Back</button>
+                <Button onClick={() => { onBackClick(null) }} variant="info">Back</Button>
             </div>
         )
     }
