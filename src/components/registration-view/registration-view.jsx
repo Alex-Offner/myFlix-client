@@ -26,7 +26,7 @@ export function RegistrationView(props) {
     }
 
     return (
-        <Form className="">
+        <Form className="center-registration">
             <h1>myFlix Registration</h1>
             <Form.Group controlId="formUsername">
                 <Form.Label>Username:</Form.Label>

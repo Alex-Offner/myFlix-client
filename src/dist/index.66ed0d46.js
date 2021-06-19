@@ -26303,7 +26303,7 @@ function RegistrationView(props) {
         props.onRegistered(true);
     };
     return(/*#__PURE__*/ _reactDefault.default.createElement(_formDefault.default, {
-        className: "",
+        className: "center-registration",
         __source: {
             fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\registration-view\\registration-view.jsx",
             lineNumber: 29
