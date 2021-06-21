@@ -8,6 +8,9 @@ import { MovieView } from '../movie-view/movie-view';
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
+
+import './main-view.scss';
 
 export class MainView extends React.Component {
 
@@ -25,16 +28,29 @@ export class MainView extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('https://movie-app-alex-offner.herokuapp.com/movies')
+        let accessToken = localStorage.getItem('token');
+        if (accessToken !== null) {
+            this.setState({
+                user: localStorage.getItem('user')
+            });
+            this.getMovies(accessToken);
+        }
+    }
+
+    getMovies(token) {
+        axios.get('https://movie-app-alex-offner.herokuapp.com/movies', {
+            headers: { Authorization: `Bearer ${token}` }
+        })
             .then(response => {
                 this.setState({
                     movies: response.data
                 });
             })
-            .catch(error => {
+            .catch(function (error) {
                 console.log(error);
-            })
+            });
     }
+
 
     setSelectedMovie(newSelectedMovie) {
         this.setState({
@@ -42,9 +58,22 @@ export class MainView extends React.Component {
         });
     }
 
-    onLoggedIn(user) {
+    onLoggedIn(authData) {
+        console.log(authData);
         this.setState({
-            user
+            user: authData.user.username
+        });
+
+        localStorage.setItem('token', authData.token);
+        localStorage.setItem('user', authData.user.username);
+        this.getMovies(authData.token);
+    }
+
+    onLoggedOut() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        this.setState({
+            user: null
         });
     }
 
@@ -94,6 +123,7 @@ export class MainView extends React.Component {
                         </Col>
                     ))
                 }
+                <Button className="Logout-Button" variant="info" onClick={() => { this.onLoggedOut() }}>Logout</Button>
             </Row>
         );
     }

@@ -27,6 +27,7 @@ p {
 
 .button {
   text-align: center;
+  margin-top: 5px;
 }
 .center-registration {
   position: fixed;
@@ -41,6 +42,11 @@ p {
 
 .button {
   text-align: center;
+}
+.Logout-Button {
+  position: fixed;
+  top: 10px;
+  right: 10px;
 }
 .my-flix {
   color: steelblue;
