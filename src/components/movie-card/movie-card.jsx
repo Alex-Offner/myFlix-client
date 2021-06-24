@@ -4,6 +4,8 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import './movie-card.scss';
 
+import { Link } from "react-router-dom";
+
 export class MovieCard extends React.Component {
     render() {
         //calls custom attribute {movie} from main-view <Movie Card movie ={movie} to use as a props
@@ -15,7 +17,10 @@ export class MovieCard extends React.Component {
                 <Card.Body>
                     <Card.Title>{movie.Title}</Card.Title>
                     <Card.Text>{movie.Description}</Card.Text>
-                    <Button onClick={() => { onMovieClick(movie) }} variant="primary">Open</Button>
+                    <Link to={`/movies/${movie._id}`}>
+                        <Button variant="primary">Open</Button>
+                    </Link>
+                    {/*                     <Button onClick={() => { onMovieClick(movie) }} variant="primary">Open</Button> */}
                 </Card.Body>
             </Card>
         )
@@ -37,5 +42,5 @@ MovieCard.propTypes = {
             Description: PropTypes.string
         })
     }).isRequired,
-    onMovieClick: PropTypes.func.isRequired
+    /*     onMovieClick: PropTypes.func.isRequired */
 };

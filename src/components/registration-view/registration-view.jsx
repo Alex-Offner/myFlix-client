@@ -3,6 +3,9 @@ import './registration-view.scss';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import axios from 'axios';
+
+import { Link } from "react-router-dom";
 
 export function RegistrationView(props) {
     const [username, setUsername] = useState('');
@@ -12,18 +15,28 @@ export function RegistrationView(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(username, password, email, birthday);
-        props.onRegistered(username);
-        props.onLoggedIn(null);
-
+        axios.post('https://movie-app-alex-offner.herokuapp.com/users', {
+            username: username,
+            password: password,
+            email: email,
+            birthday: birthday
+        })
+            .then(response => {
+                const data = response.data;
+                console.log(data);
+                window.open('/', '_self');
+            })
+            .catch(e => {
+                console.log('error registering the user')
+            });
     };
 
-    const MoveToSignIn = (e) => {
-        e.preventDefault();
-        console.log('Moving to login');
-        props.onLoggedIn(null);
-        props.onRegistered(true);
-    }
+    /*     const MoveToSignIn = (e) => {
+            e.preventDefault();
+            console.log('Moving to login');
+            props.onLoggedIn(null);
+            props.onRegistered(true);
+        } */
 
     return (
         <Form className="center-registration">
@@ -53,7 +66,9 @@ export function RegistrationView(props) {
             <p>or log in here</p>
             <br></br>
             <div className="button">
-                <Button className="button" variant="info" onClick={MoveToSignIn}>Sign Up</Button>
+                <Link to={`/`}>
+                    <Button variant="info">Sign In</Button>
+                </Link>
             </div>
         </Form>
     );

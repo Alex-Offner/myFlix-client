@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import './movie-view.scss';
 import Button from 'react-bootstrap/Button';
 
+import { Link } from 'react-router-dom';
+
 export class MovieView extends React.Component {
 
     //just testing adding and removing event listeners on mounted and unmounted components
@@ -36,12 +38,23 @@ export class MovieView extends React.Component {
                 </div>
                 <div className="movie-director">
                     <span className="headline">Director: </span>
-                    <span className="director-name">{movie.Director.Name}</span>
+                    <span className="director-name">
+                        <Link to={`/director/${movie.Director.Name}`}>
+                            {movie.Director.Name}
+                        </Link>
+                    </span>
                 </div>
                 <div className="movie-genre">
                     <span className="headline">Genre: </span>
-                    <span className="genre-name">{movie.Genre.Name}</span>
+                    <span className="genre-name">
+                        <Link to={`/genre/${movie.Genre.Name}`}>
+                            {movie.Genre.Name}
+                        </Link>
+                    </span>
                 </div>
+                {/*                 <Link to={`/`}>
+                    <Button variant="info">Back</Button>
+                </Link> */}
                 <Button onClick={() => { onBackClick(null) }} variant="info">Back</Button>
             </div>
         )

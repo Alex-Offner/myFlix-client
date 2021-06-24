@@ -3,12 +3,15 @@ import './login-view.scss';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
+import { Link } from "react-router-dom";
+
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
 export function LoginView(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    //the following const are to set states for form validation
     const [usernameErr, setUsernameErr] = useState({});
     const [passwordErr, setPasswordErr] = useState({});
     const [userExists, setuserExists] = useState({});
@@ -69,12 +72,12 @@ export function LoginView(props) {
 
     }
 
-    const moveToSignUp = (e) => {
-        e.preventDefault();
-        console.log('Moving to registration!');
-        props.onLoggedIn(true);
-        props.onRegistered(null);
-    }
+    /*     const moveToSignUp = (e) => {
+            e.preventDefault();
+            console.log('Moving to registration!');
+            props.onLoggedIn(true);
+            props.onRegistered(null);
+        } */
 
 
     return (
@@ -104,14 +107,17 @@ export function LoginView(props) {
             </div>
             <br></br>
             <p>or register here</p>
+            <br></br>
             <div className="button">
-                <Button className="button" variant="info" onClick={moveToSignUp}>Sign Up</Button>
+                <Link to={`/register`}>
+                    <Button variant="info">Sign Up</Button>
+                </Link>
             </div>
         </Form>
     );
 }
 
-LoginView.propTypes = {
+/* LoginView.propTypes = {
     onRegistered: PropTypes.func.isRequired,
     onLoggedIn: PropTypes.func.isRequired
-};
+}; */
