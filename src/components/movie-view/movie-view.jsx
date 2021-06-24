@@ -7,20 +7,6 @@ import { Link } from 'react-router-dom';
 
 export class MovieView extends React.Component {
 
-    //just testing adding and removing event listeners on mounted and unmounted components
-    /*
-    keypressCallback(event) {
-        console.log(event.key);
-    }
-
-    componentDidMount() {
-        document.addEventListener('keypress', this.keypressCallback);
-    }
-
-    componentWillUnmount() {
-        document.removeEventListener('keypress', this.keypressCallback);
-    }
-*/
     render() {
         const { movie, onBackClick } = this.props;
         return (

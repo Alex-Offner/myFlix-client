@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import './director-view.scss';
 import Button from 'react-bootstrap/Button';
 
-import { Link } from 'react-router-dom';
-
 export class DirectorView extends React.Component {
     render() {
         const { director, onBackClick } = this.props;

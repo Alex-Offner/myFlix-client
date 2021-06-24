@@ -12,9 +12,14 @@ export function RegistrationView(props) {
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const [birthday, setBirthday] = useState('');
+    //the following consts are to set states for form validation
+    const [usernameErr, setUsernameErr] = useState({});
+    const [passwordErr, setPasswordErr] = useState({});
+    const [emailErr, setEmailErr] = useState({});
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        const isValid = formValidation();
         axios.post('https://movie-app-alex-offner.herokuapp.com/users', {
             username: username,
             password: password,
@@ -31,12 +36,48 @@ export function RegistrationView(props) {
             });
     };
 
-    /*     const MoveToSignIn = (e) => {
-            e.preventDefault();
-            console.log('Moving to login');
-            props.onLoggedIn(null);
-            props.onRegistered(true);
-        } */
+    const formValidation = () => {
+        const usernameErr = {};
+        const passwordErr = {};
+        const emailErr = {};
+
+        let isValid = true;
+
+        if (username.trim().length < 5) {
+            usernameErr.usernameShort = "Username is too short.";
+            isValid = false;
+        }
+
+        if (!username.match(/^[0-9a-zA-Z]+$/)) {
+            usernameErr.usernameNotAlphanumeric = "Username must only include alphanumeric symbols.";
+            isValid = false;
+        }
+
+        if (password.trim().length === 0) {
+            passwordErr.noPassword = "Password is required.";
+            isValid = false;
+        }
+
+        if (email.trim().length === 0) {
+            emailErr.noEmail = "Email is required.";
+            isValid = false;
+        }
+
+        if (!email.includes("@")) {
+            emailErr.noAtSymbol = "Email is not valid.";
+            isValid = false;
+        }
+
+        if (!email.includes(".")) {
+            emailErr.noDot = "Email is not valid.";
+            isValid = false;
+        }
+
+        setUsernameErr(usernameErr);
+        setPasswordErr(passwordErr);
+        setEmailErr(emailErr);
+        return isValid;
+    }
 
     return (
         <Form className="center-registration">
@@ -45,14 +86,23 @@ export function RegistrationView(props) {
                 <Form.Label>Username:</Form.Label>
                 <Form.Control type="text" value={username} onChange={e => setUsername(e.target.value)} />
             </Form.Group>
+            {Object.keys(usernameErr).map((key) => {
+                return <div key={key} style={{ color: "red" }}>{usernameErr[key]}</div>
+            })}
             <Form.Group controlId="formPassword">
                 <Form.Label>Password:</Form.Label>
                 <Form.Control type="password" value={password} onChange={e => setPassword(e.target.value)} />
             </Form.Group>
+            {Object.keys(passwordErr).map((key) => {
+                return <div key={key} style={{ color: "red" }}>{passwordErr[key]}</div>
+            })}
             <Form.Group controlId="formEmail">
                 <Form.Label>Email:</Form.Label>
                 <Form.Control type="email" value={email} onChange={e => setEmail(e.target.value)} />
             </Form.Group>
+            {Object.keys(emailErr).map((key) => {
+                return <div key={key} style={{ color: "red" }}>{emailErr[key]}</div>
+            })}
             <Form.Group controlId="formBirthday">
                 <Form.Label>Your Birthday:</Form.Label>
                 <Form.Control type="date" value={birthday} onChange={e => setBirthday(e.target.value)} />
@@ -73,8 +123,8 @@ export function RegistrationView(props) {
         </Form>
     );
 }
-
+/*
 RegistrationView.propTypes = {
     onRegistered: PropTypes.func.isRequired,
     onLoggedIn: PropTypes.func.isRequired
-};
+}; */

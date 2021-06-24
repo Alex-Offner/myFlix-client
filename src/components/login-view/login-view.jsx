@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './login-view.scss';
-import PropTypes from 'prop-types';
 import axios from 'axios';
 
 import { Link } from "react-router-dom";
@@ -116,8 +115,3 @@ export function LoginView(props) {
         </Form>
     );
 }
-
-/* LoginView.propTypes = {
-    onRegistered: PropTypes.func.isRequired,
-    onLoggedIn: PropTypes.func.isRequired
-}; */

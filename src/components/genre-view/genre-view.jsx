@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import './genre-view.scss';
 import Button from 'react-bootstrap/Button';
 
-import { Link } from 'react-router-dom';
-
 export class GenreView extends React.Component {
     render() {
         const { genre, onBackClick } = this.props;
