@@ -28,13 +28,7 @@ export class MainView extends React.Component {
             movies: [],
             user: null,
             userData: null,
-            token: null,
-            profile: {
-                username: null,
-                password: null,
-                email: null,
-                favouriteMovies: []
-            }
+            token: null
         };
     }
 
@@ -43,10 +37,10 @@ export class MainView extends React.Component {
         if (accessToken !== null) {
             this.setState({
                 user: localStorage.getItem('user'),
-                userData: JSON.parse(localStorage.getItem('userData')),
                 token: localStorage.getItem('token')
             });
             this.getMovies(accessToken);
+            this.getUsers(accessToken);
         }
     }
 
@@ -64,32 +58,35 @@ export class MainView extends React.Component {
             });
     }
 
-    getProfile(token) {
+    getUsers(token) {
         axios.get('https://movie-app-alex-offner.herokuapp.com/users/${user}', {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(response => {
                 this.setState({
-                    profile: {
-                        username: response.data.username,
-                        password: response.data.password,
-                        email: response.data.email,
-                        favouriteMovies: response.data.favouriteMovies
-                    }
+                    users: response.data
                 });
+                console.log(response)
             })
             .catch(function (error) {
                 console.log(error);
             });
     }
-
-
-    /*     setSelectedMovie(newSelectedMovie) {
-            this.setState({
-                selectedMovie: newSelectedMovie
-            });
-        } */
-
+    /*     getProfile(token) {
+            axios.get('https://movie-app-alex-offner.herokuapp.com/users/${user}', {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+                .then(response => {
+                    console.log("Profile loaded!");
+                    this.setState({
+                        userData: response.data
+                    });
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+     */
     onLoggedIn(authData) {
         console.log(authData);
         this.setState({
@@ -99,7 +96,6 @@ export class MainView extends React.Component {
         localStorage.setItem('token', authData.token);
         localStorage.setItem('user', authData.user.username);
         this.getMovies(authData.token);
-        this.getProfile(authData.token);
     }
 
     onLoggedOut() {
@@ -110,21 +106,17 @@ export class MainView extends React.Component {
         });
     }
 
-    onUserProfile(profile) {
-        console.log(profile);
+    onUserProfile(user) {
+        console.log(user);
         this.setState({
-            profile: {
-                username: profile.username,
-                password: profile.password,
-                email: profile.email,
-                favouriteMovies: profile.favouriteMovies
-            }
+            user: authData.user.username
         });
+        this.getProfile(user.token, user.username);
     }
 
     render() {
         //object destruction for const movies = this.state.movies
-        const { movies, profile, user, token } = this.state;
+        const { movies, userData, user, token } = this.state;
 
         return (
             <Router>
@@ -198,13 +190,13 @@ export class MainView extends React.Component {
                         </Col>
                     }} />
 
-                    <Route path="/users" render={({ match, history }) => {
+                    <Route path="/users/${user}" render={({ match, history }) => {
                         if (!user) return <Col>
                             <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
                         </Col>
                         return (
                             <Col md={8}>
-                                <ProfileView profile={profile} token={token} onUserProfile={profile => this.onUserProfile(profile)} onBackClick={() => history.goBack()} />
+                                <ProfileView user={user} token={token} onLoggedIn={user => this.onLoggedIn(user)} onBackClick={() => history.goBack()} />
                             </Col>
                         )
                     }} />
