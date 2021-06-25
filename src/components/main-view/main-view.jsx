@@ -28,7 +28,13 @@ export class MainView extends React.Component {
             movies: [],
             user: null,
             userData: null,
-            token: null
+            token: null,
+            profile: {
+                username: null,
+                password: null,
+                email: null,
+                favouriteMovies: []
+            }
         };
     }
 
@@ -58,15 +64,19 @@ export class MainView extends React.Component {
             });
     }
 
-    getProfile(token, user) {
+    getProfile(token) {
         axios.get('https://movie-app-alex-offner.herokuapp.com/users/${user}', {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(response => {
                 this.setState({
-                    userData: response.data
+                    profile: {
+                        username: response.data.username,
+                        password: response.data.password,
+                        email: response.data.email,
+                        favouriteMovies: response.data.favouriteMovies
+                    }
                 });
-                localStorage.setItem('userData', JSON.stringify(response.data));
             })
             .catch(function (error) {
                 console.log(error);
@@ -89,7 +99,7 @@ export class MainView extends React.Component {
         localStorage.setItem('token', authData.token);
         localStorage.setItem('user', authData.user.username);
         this.getMovies(authData.token);
-        this.getProfile(authData.token, authData.user.username);
+        this.getProfile(authData.token);
     }
 
     onLoggedOut() {
@@ -100,9 +110,21 @@ export class MainView extends React.Component {
         });
     }
 
+    onUserProfile(profile) {
+        console.log(profile);
+        this.setState({
+            profile: {
+                username: profile.username,
+                password: profile.password,
+                email: profile.email,
+                favouriteMovies: profile.favouriteMovies
+            }
+        });
+    }
+
     render() {
         //object destruction for const movies = this.state.movies
-        const { movies, userData, user, token } = this.state;
+        const { movies, profile, user, token } = this.state;
 
         return (
             <Router>
@@ -182,7 +204,7 @@ export class MainView extends React.Component {
                         </Col>
                         return (
                             <Col md={8}>
-                                <ProfileView user={user} token={token} onBackClick={() => history.goBack()} />
+                                <ProfileView profile={profile} token={token} onUserProfile={profile => this.onUserProfile(profile)} onBackClick={() => history.goBack()} />
                             </Col>
                         )
                     }} />

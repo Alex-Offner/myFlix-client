@@ -10,7 +10,6 @@ export class ProfileView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: {},
             username: "",
             password: "",
             birthday: "",
@@ -19,24 +18,25 @@ export class ProfileView extends React.Component {
     }
 
     render() {
-        const { user, onBackClick } = this.props;
+        const { profile, onBackClick } = this.props;
+        console.log(this.props);
         return (
             <div className="profile-view">
                 <div className="profile-username">
                     <span className="headline">Username: </span>
-                    <span className="title">{user.username}</span>
+                    <span className="title">{profile.username}</span>
                 </div>
                 <div className="profile-email">
                     <span className="headline">Email: </span>
-                    <span className="title">{user.email}</span>
+                    <span className="title">{profile.email}</span>
                 </div>
                 <div className="profile-birthday">
                     <span className="headline">Birthday: </span>
-                    <span className="title">{user.birthday}</span>
+                    <span className="title">{profile.birthday}</span>
                 </div>
                 <div className="movie-genre">
                     <span className="headline">List of favourite movies: </span>
-                    <span className="title">{user.favouriteMovies}</span>
+                    <span className="title">{profile.favouriteMovies}</span>
                 </div>
                 <Button onClick={() => { onBackClick(null) }} variant="info">Back</Button>
             </div>
@@ -46,7 +46,7 @@ export class ProfileView extends React.Component {
 }
 
 ProfileView.propTypes = {
-    user: PropTypes.shape({
+    profile: PropTypes.shape({
         username: PropTypes.string.isRequired,
         email: PropTypes.string.isRequired,
         birthday: PropTypes.number,
@@ -56,5 +56,3 @@ ProfileView.propTypes = {
     onBackClick: PropTypes.func.isRequired
 
 }
-
-console.log(this.props);
