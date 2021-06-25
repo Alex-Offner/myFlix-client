@@ -26,9 +26,9 @@ export class MainView extends React.Component {
         super();
         this.state = {
             movies: [],
-            selectedMovie: null,
             user: null,
-            profileData: null
+            userData: null,
+            token: null
         };
     }
 
@@ -37,7 +37,7 @@ export class MainView extends React.Component {
         if (accessToken !== null) {
             this.setState({
                 user: localStorage.getItem('user'),
-                profleData: JSON.parse(localStorage.getItem('profileData')),
+                userData: JSON.parse(localStorage.getItem('userData')),
                 token: localStorage.getItem('token')
             });
             this.getMovies(accessToken);
@@ -58,15 +58,15 @@ export class MainView extends React.Component {
             });
     }
 
-    getProfile(token) {
-        axios.get('https://movie-app-alex-offner.herokuapp.com/users/${username}', {
+    getProfile(token, user) {
+        axios.get('https://movie-app-alex-offner.herokuapp.com/users/${user}', {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(response => {
                 this.setState({
-                    profileData: response.data
+                    userData: response.data
                 });
-                localStorage.setItem('profileData', JSON.stringify(response.data));
+                localStorage.setItem('userData', JSON.stringify(response.data));
             })
             .catch(function (error) {
                 console.log(error);
@@ -74,11 +74,11 @@ export class MainView extends React.Component {
     }
 
 
-    setSelectedMovie(newSelectedMovie) {
-        this.setState({
-            selectedMovie: newSelectedMovie
-        });
-    }
+    /*     setSelectedMovie(newSelectedMovie) {
+            this.setState({
+                selectedMovie: newSelectedMovie
+            });
+        } */
 
     onLoggedIn(authData) {
         console.log(authData);
@@ -89,6 +89,7 @@ export class MainView extends React.Component {
         localStorage.setItem('token', authData.token);
         localStorage.setItem('user', authData.user.username);
         this.getMovies(authData.token);
+        this.getProfile(authData.token, authData.user.username);
     }
 
     onLoggedOut() {
@@ -101,7 +102,7 @@ export class MainView extends React.Component {
 
     render() {
         //object destruction for const movies = this.state.movies
-        const { movies, profileData, user, token } = this.state;
+        const { movies, userData, user, token } = this.state;
 
         return (
             <Router>
@@ -175,13 +176,13 @@ export class MainView extends React.Component {
                         </Col>
                     }} />
 
-                    <Route path="/users/:user" render={({ history }) => {
+                    <Route path="/users" render={({ match, history }) => {
                         if (!user) return <Col>
                             <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
                         </Col>
                         return (
                             <Col md={8}>
-                                <ProfileView profile={user} token={token} onBackClick={() => history.goBack()} />
+                                <ProfileView user={user} token={token} onBackClick={() => history.goBack()} />
                             </Col>
                         )
                     }} />
