@@ -22137,7 +22137,7 @@ class MainView extends _reactDefault.default.Component {
             __self: this
         }), /*#__PURE__*/ _reactDefault.default.createElement(_reactRouterDom.Route, {
             path: "/users/:user",
-            render: ({ match , history  })=>{
+            render: ({ history  })=>{
                 if (!user) return(/*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Col, null, /*#__PURE__*/ _reactDefault.default.createElement(_loginView.LoginView, {
                     onLoggedIn: (user1)=>this.onLoggedIn(user1)
                 })));
@@ -40050,7 +40050,7 @@ class ProfileView extends _reactDefault.default.Component {
         };
     }
     render() {
-        const { user , onBackClick  } = this.props;
+        const { profile , onBackClick  } = this.props;
         return(/*#__PURE__*/ _reactDefault.default.createElement("div", {
             className: "profile-view",
             __source: {
@@ -40079,7 +40079,7 @@ class ProfileView extends _reactDefault.default.Component {
                 lineNumber: 26
             },
             __self: this
-        }, user.username)), /*#__PURE__*/ _reactDefault.default.createElement("div", {
+        }, profile.username)), /*#__PURE__*/ _reactDefault.default.createElement("div", {
             className: "profile-email",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
@@ -40100,7 +40100,7 @@ class ProfileView extends _reactDefault.default.Component {
                 lineNumber: 30
             },
             __self: this
-        }, user.email)), /*#__PURE__*/ _reactDefault.default.createElement("div", {
+        }, profile.email)), /*#__PURE__*/ _reactDefault.default.createElement("div", {
             className: "profile-birthday",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
@@ -40121,7 +40121,7 @@ class ProfileView extends _reactDefault.default.Component {
                 lineNumber: 34
             },
             __self: this
-        }, user.birthday)), /*#__PURE__*/ _reactDefault.default.createElement("div", {
+        }, profile.birthday)), /*#__PURE__*/ _reactDefault.default.createElement("div", {
             className: "movie-genre",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
@@ -40142,7 +40142,7 @@ class ProfileView extends _reactDefault.default.Component {
                 lineNumber: 38
             },
             __self: this
-        }, user.favouriteMovies)), /*#__PURE__*/ _reactDefault.default.createElement(_buttonDefault.default, {
+        }, profile.favouriteMovies)), /*#__PURE__*/ _reactDefault.default.createElement(_buttonDefault.default, {
             onClick: ()=>{
                 onBackClick(null);
             },
@@ -40156,7 +40156,7 @@ class ProfileView extends _reactDefault.default.Component {
     }
 }
 ProfileView.propTypes = {
-    user: _propTypesDefault.default.shape({
+    profile: _propTypesDefault.default.shape({
         username: _propTypesDefault.default.string.isRequired,
         email: _propTypesDefault.default.string.isRequired,
         birthday: _propTypesDefault.default.number,
