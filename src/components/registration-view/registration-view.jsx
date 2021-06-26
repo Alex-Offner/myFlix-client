@@ -63,15 +63,16 @@ export function RegistrationView(props) {
             isValid = false;
         }
 
-        if (!email.includes("@")) {
+        if (!email.includes("@") || !email.includes(".")) {
             emailErr.noAtSymbol = "Email is not valid.";
             isValid = false;
         }
 
-        if (!email.includes(".")) {
-            emailErr.noDot = "Email is not valid.";
-            isValid = false;
-        }
+        /*         if (!email.includes(".")) {
+                    emailErr.noDot = "Email is not valid.";
+                    isValid = false;
+                } */
+
 
         setUsernameErr(usernameErr);
         setPasswordErr(passwordErr);

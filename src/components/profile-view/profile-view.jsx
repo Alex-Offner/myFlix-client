@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import './profile-view.scss';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
-import { Form, FormControl, ListGroup, Card, Row, Col } from 'react-bootstrap';
+import { Form, FormControl, Card, Row, Col } from 'react-bootstrap';
 
 import { Link } from 'react-router-dom';
 
@@ -17,10 +17,15 @@ export class ProfileView extends React.Component {
                 birthday: "",
                 email: "",
                 _id: "",
-                favouriteMovies: []
-            }
+                favouriteMovies: [],
+
+            },
+            usernameErr: "",
+            passwordErr: "",
+            emailErr: ""
         };
     }
+
 
     componentDidMount() {
         let token = localStorage.getItem("token");
@@ -42,29 +47,33 @@ export class ProfileView extends React.Component {
             })
     }
 
-    handleUpdate(e, accessToken) {
+    handleUpdate(e, token) {
         /*         let accessToken = localStorage.getItem("token"); */
         e.preventDefault();
         let user = localStorage.getItem("user");
         console.log(user);
-        axios.put('https://movie-app-alex-offner.herokuapp.com/users/' + this.props.user.username,
-            {
-                username: this.state.username,
-                password: this.state.password,
-                email: this.state.email,
-                birthday: this.state.birthday
-            },
-            { headers: { Authorization: `Bearer ${accessToken}` } }
-        )
-            .then((response) => {
-                const data = response.data;
-                localStorage.setItem("user", data.username);
-                console.log(data);
-                alert(user + " has been updated!");
-            })
-            .catch(function (error) {
-                console.log(error.response.data);
-            })
+        const isValid = this.formValidation();
+        if (isValid) {
+            axios.put('https://movie-app-alex-offner.herokuapp.com/users/' + this.props.user.username,
+                {
+                    username: this.state.user.username,
+                    password: this.state.user.password,
+                    email: this.state.user.email,
+                    birthday: this.state.user.birthday
+                },
+                { headers: { Authorization: `Bearer ${token}` } }
+            )
+                .then((response) => {
+                    const data = response.data;
+                    localStorage.setItem("user", data.username);
+                    console.log(data);
+                    alert(user + " has been updated!");
+                })
+                .catch(function (error) {
+                    console.log(error.response.data);
+                })
+        }
+
     }
 
     handleDelete() {
@@ -109,8 +118,49 @@ export class ProfileView extends React.Component {
         })
     }
 
+    formValidation() {
+        let usernameErr = {};
+        let passwordErr = {};
+        let emailErr = {};
+
+        let isValid = true;
+
+        if (this.state.username.trim().length < 5) {
+            usernameErr.usernameShort = "Username is too short.";
+            isValid = false;
+        }
+
+        if (!this.state.username.match(/^[0-9a-zA-Z]+$/)) {
+            usernameErr.usernameNotAlphanumeric = "Username must only include alphanumeric symbols.";
+            isValid = false;
+        }
+
+        if (this.state.password.trim().length === 0) {
+            passwordErr.noPassword = "Password is required.";
+            isValid = false;
+        }
+
+        if (this.state.email.trim().length === 0) {
+            emailErr.noEmail = "Email is required.";
+            isValid = false;
+        }
+
+        if (!email.includes("@") || !email.includes(".")) {
+            emailErr.noAtSymbol = "Email is not valid.";
+            isValid = false;
+        }
+
+        this.setState({
+            usernameErr: usernameErr,
+            passwordErr, passwordErr,
+            emailErr: emailErr,
+        })
+        return isValid;
+    }
+
     render() {
         const { movies } = this.props;
+        const { usernameErr, passwordErr, emailErr } = this.state;
         console.log(movies);
         const ListOfFavouriteMovies = movies.filter((movie) => {
             return this.state.user.favouriteMovies.includes(movie._id);
@@ -161,6 +211,9 @@ export class ProfileView extends React.Component {
                             <Form.Label>Username: </Form.Label>
                             <FormControl type="text" name="username" placeholder="Change username" value={this.state.username || ''} onChange={(e) => this.handleChange(e)} />
                         </Form.Group>
+                        {Object.keys(usernameErr).map((key) => {
+                            return <div key={key} style={{ color: "red" }}>{usernameErr[key]}</div>
+                        })}
 
                         <Form.Group controlid="formPassword">
                             <Form.Label>Password: </Form.Label>
@@ -180,7 +233,7 @@ export class ProfileView extends React.Component {
                         {/* <Link to={`/users/${this.state.user.username}`}> */}
                         <Button className="mb-2" variant="primary"
                             type="submit"
-                            onClick={(e) => this.handleUpdate}
+                            onClick={(e, token) => this.handleUpdate}
                         >
                             Save changes
                         </Button>
