@@ -28,7 +28,8 @@ export class MainView extends React.Component {
             movies: [],
             user: null,
             userData: null,
-            token: null
+            token: null,
+            users: null
         };
     }
 
@@ -58,7 +59,7 @@ export class MainView extends React.Component {
             });
     }
 
-    getUsers(token) {
+    getUsers(token, users) {
         axios.get('https://movie-app-alex-offner.herokuapp.com/users/${user}', {
             headers: { Authorization: `Bearer ${token}` }
         })
@@ -109,7 +110,7 @@ export class MainView extends React.Component {
     onUserProfile(user) {
         console.log(user);
         this.setState({
-            user: authData.user.username
+            users: authData.user.username
         });
         this.getProfile(user.token, user.username);
     }
