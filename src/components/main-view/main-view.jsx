@@ -41,7 +41,7 @@ export class MainView extends React.Component {
                 token: localStorage.getItem('token')
             });
             this.getMovies(accessToken);
-            this.getUsers(accessToken);
+            /*             this.getUsers(accessToken); */
         }
     }
 
@@ -59,35 +59,21 @@ export class MainView extends React.Component {
             });
     }
 
-    getUsers(token, users) {
-        axios.get('https://movie-app-alex-offner.herokuapp.com/users/${user}', {
-            headers: { Authorization: `Bearer ${token}` }
-        })
-            .then(response => {
-                this.setState({
-                    users: response.data
-                });
-                console.log(response)
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-    }
-    /*     getProfile(token) {
-            axios.get('https://movie-app-alex-offner.herokuapp.com/users/${user}', {
+    /*     getUsers(token) {
+            axios.get('https://movie-app-alex-offner.herokuapp.com/users/' + this.state.user, {
                 headers: { Authorization: `Bearer ${token}` }
             })
                 .then(response => {
-                    console.log("Profile loaded!");
                     this.setState({
-                        userData: response.data
+                        users: response.data
                     });
+                    console.log(response.data)
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
-        }
-     */
+        } */
+
     onLoggedIn(authData) {
         console.log(authData);
         this.setState({
@@ -107,14 +93,6 @@ export class MainView extends React.Component {
         });
     }
 
-    onUserProfile(user) {
-        console.log(user);
-        this.setState({
-            users: authData.user.username
-        });
-        this.getProfile(user.token, user.username);
-    }
-
     render() {
         //object destruction for const movies = this.state.movies
         const { movies, userData, user, token } = this.state;
@@ -126,7 +104,7 @@ export class MainView extends React.Component {
                     <Navbar.Brand href="/">MyFlix</Navbar.Brand>
                     <Nav className="ml-auto">
                         {user && <Nav.Link href="/">Movies</Nav.Link>}
-                        {user && <Nav.Link href="/users/${user}">User profile</Nav.Link>}
+                        {user && <Nav.Link href={`/users/${this.state.user}`}>User profile</Nav.Link>}
                         {!user && <Nav.Link href="register">Register</Nav.Link>}
                         {user === null ?
                             <Nav.Link href="/">Log in</Nav.Link> :
@@ -191,13 +169,13 @@ export class MainView extends React.Component {
                         </Col>
                     }} />
 
-                    <Route path="/users/${user}" render={({ match, history }) => {
+                    <Route path={`/users/${this.state.user}`} render={({ match, history }) => {
                         if (!user) return <Col>
                             <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
                         </Col>
                         return (
                             <Col md={8}>
-                                <ProfileView user={user} token={token} onLoggedIn={user => this.onLoggedIn(user)} onBackClick={() => history.goBack()} />
+                                <ProfileView user={user} token={token} movies={movies} onLoggedIn={user => this.onLoggedIn(user)} onBackClick={() => history.goBack()} />
                             </Col>
                         )
                     }} />

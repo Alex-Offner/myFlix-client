@@ -1,11 +1,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './movie-view.scss';
+import axios from 'axios';
 import Button from 'react-bootstrap/Button';
 
 import { Link } from 'react-router-dom';
 
 export class MovieView extends React.Component {
+
+    addMovie() {
+        const token = localStorage.getItem("token");
+        const user = localStorage.getItem("user");
+        axios.post('https://movie-app-alex-offner.herokuapp.com/users/' + user + '/favouriteMovies/' + this.props.movie._id, {},
+            { headers: { Authorization: `Bearer ${token}` } }
+        )
+            .then((response) => {
+                console.log(response);
+                alert(this.props.movie.Title + " has been added to your list of favourites!");
+            })
+    }
+
+    removeMovie() {
+        const token = localStorage.getItem("token");
+        const user = localStorage.getItem("user");
+        axios.delete('https://movie-app-alex-offner.herokuapp.com/users/' + user + '/favouriteMovies/' + this.props.movie._id,
+            { headers: { Authorization: `Bearer ${token}` } }
+        )
+            .then((response) => {
+                console.log(response);
+                alert(this.props.movie.Title + " has been removed from your list if favourites!");
+            })
+
+    }
 
     render() {
         const { movie, onBackClick } = this.props;
@@ -38,9 +64,10 @@ export class MovieView extends React.Component {
                         </Link>
                     </span>
                 </div>
-                {/*                 <Link to={`/`}>
-                    <Button variant="info">Back</Button>
-                </Link> */}
+                <Button className="add-movie-button" variant="primary" onClick={() => this.addMovie(movie)}>Add movie</Button>
+                <Button variant="danger" onClick={() => this.removeMovie(movie)}>Remove movie</Button>
+                <br></br>
+                <br></br>
                 <Button onClick={() => { onBackClick(null) }} variant="info">Back</Button>
             </div>
         )

@@ -11,7 +11,9 @@
 .card {
   margin: 1%;
 }
-
+.add-movie-button {
+  margin-right: 2%;
+}
 .centered {
   position: absolute;
   left: 50%;
@@ -41,7 +43,14 @@ p {
 }
 
 
-
+.profile-form {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-60%, 100%);
+  width: 60%;
+  height: 60%;
+}
 .my-flix {
   color: steelblue;
 }
