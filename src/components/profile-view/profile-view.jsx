@@ -22,7 +22,10 @@ export class ProfileView extends React.Component {
             },
             usernameErr: "",
             passwordErr: "",
-            emailErr: ""
+            emailErr: "",
+            username: "",
+            password: "",
+            email: ""
         };
     }
 
@@ -47,19 +50,20 @@ export class ProfileView extends React.Component {
             })
     }
 
-    handleUpdate(e, token) {
+    handleUpdate(e) {
         /*         let accessToken = localStorage.getItem("token"); */
-        e.preventDefault();
         let user = localStorage.getItem("user");
-        console.log(user);
+        let token = localStorage.getItem("token");
+        /*         console.log(user); */
         const isValid = this.formValidation();
+        console.log("Hi!");
         if (isValid) {
-            axios.put('https://movie-app-alex-offner.herokuapp.com/users/' + this.props.user.username,
+            axios.put('https://movie-app-alex-offner.herokuapp.com/users/' + this.props.user,
                 {
-                    username: this.state.user.username,
-                    password: this.state.user.password,
-                    email: this.state.user.email,
-                    birthday: this.state.user.birthday
+                    username: this.state.username,
+                    password: this.state.password,
+                    email: this.state.email,
+                    birthday: this.state.birthday
                 },
                 { headers: { Authorization: `Bearer ${token}` } }
             )
@@ -67,7 +71,8 @@ export class ProfileView extends React.Component {
                     const data = response.data;
                     localStorage.setItem("user", data.username);
                     console.log(data);
-                    alert(user + " has been updated!");
+                    alert(user + " has been updated");
+                    window.location.pathname = `/users/${data.username}`;
                 })
                 .catch(function (error) {
                     console.log(error.response.data);
@@ -112,7 +117,7 @@ export class ProfileView extends React.Component {
 
     handleChange(e) {
         let { name, value } = e.target;
-        /* console.log(name, value) */
+        console.log(name, value);
         this.setState({
             [name]: value
         })
@@ -145,7 +150,7 @@ export class ProfileView extends React.Component {
             isValid = false;
         }
 
-        if (!email.includes("@") || !email.includes(".")) {
+        if (!this.state.email.includes("@") || !this.state.email.includes(".")) {
             emailErr.noAtSymbol = "Email is not valid.";
             isValid = false;
         }
@@ -219,21 +224,27 @@ export class ProfileView extends React.Component {
                             <Form.Label>Password: </Form.Label>
                             <FormControl type="password" name="password" placeholder="Change password" value={this.state.password || ''} onChange={(e) => this.handleChange(e)} />
                         </Form.Group>
+                        {Object.keys(passwordErr).map((key) => {
+                            return <div key={key} style={{ color: "red" }}>{passwordErr[key]}</div>
+                        })}
 
                         <Form.Group controlid="formEmail">
                             <Form.Label>Email: </Form.Label>
                             <FormControl type="email" name="email" placeholder="Change email" value={this.state.email || ''} onChange={(e) => this.handleChange(e)} />
                         </Form.Group>
+                        {Object.keys(emailErr).map((key) => {
+                            return <div key={key} style={{ color: "red" }}>{emailErr[key]}</div>
+                        })}
 
                         <Form.Group controlid="formBirthday">
                             <Form.Label>Birthday: </Form.Label>
                             <FormControl type="date" name="birthday" value={this.state.birthday || ''} onChange={(e) => this.handleChange(e)} />
                         </Form.Group>
 
-                        {/* <Link to={`/users/${this.state.user.username}`}> */}
+                        {/* <Link to={`/`}> */}
                         <Button className="mb-2" variant="primary"
-                            type="submit"
-                            onClick={(e, token) => this.handleUpdate}
+                            /*                             type="submit" */
+                            onClick={() => this.handleUpdate(this.state.user)}
                         >
                             Save changes
                         </Button>
