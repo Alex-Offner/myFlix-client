@@ -51,12 +51,9 @@ export class ProfileView extends React.Component {
     }
 
     handleUpdate(e) {
-        /*         let accessToken = localStorage.getItem("token"); */
         let user = localStorage.getItem("user");
         let token = localStorage.getItem("token");
-        /*         console.log(user); */
         const isValid = this.formValidation();
-        console.log("Hi!");
         if (isValid) {
             axios.put('https://movie-app-alex-offner.herokuapp.com/users/' + this.props.user,
                 {
@@ -241,14 +238,13 @@ export class ProfileView extends React.Component {
                             <FormControl type="date" name="birthday" value={this.state.birthday || ''} onChange={(e) => this.handleChange(e)} />
                         </Form.Group>
 
-                        {/* <Link to={`/`}> */}
+
                         <Button className="mb-2" variant="primary"
-                            /*                             type="submit" */
                             onClick={() => this.handleUpdate(this.state.user)}
                         >
                             Save changes
                         </Button>
-                        {/* </Link> */}
+
                         <br></br>
                         <br></br>
                         <Link to={`/`}>
