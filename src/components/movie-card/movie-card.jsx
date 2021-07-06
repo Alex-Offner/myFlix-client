@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 export class MovieCard extends React.Component {
     render() {
         //calls custom attribute {movie} from main-view <Movie Card movie ={movie} to use as a props
-        const { movie, onMovieClick } = this.props;
+        const { movie } = this.props;
 
         return (
             <Card className="card">
@@ -20,12 +20,9 @@ export class MovieCard extends React.Component {
                     <Link to={`/movies/${movie._id}`}>
                         <Button variant="primary">Open</Button>
                     </Link>
-                    {/*                     <Button onClick={() => { onMovieClick(movie) }} variant="primary">Open</Button> */}
                 </Card.Body>
             </Card>
         )
-
-        //return <div className="movie-card" onClick={() => { onMovieClick(movie); }}>{movie.Title}</div>;
     }
 }
 

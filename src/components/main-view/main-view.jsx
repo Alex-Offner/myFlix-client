@@ -1,17 +1,24 @@
 import React from 'react';
 import axios from 'axios';
 
+import { connect } from 'react-redux';
+
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 
+import { setMovies } from '../../actions/actions';
+import { setUser } from '../../actions/actions';
+
+
+import MoviesList from '../movies-list/movies-list';
 import { LoginView } from '../login-view/login-view';
 import { RegistrationView } from '../registration-view/registration-view';
-import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
 import { DirectorView } from '../director-view/director-view';
 import { GenreView } from '../genre-view/genre-view';
 import { ProfileView } from '../profile-view/profile-view';
+import VisibilityFilterInput from '../visibility-filter-input/visibility-filter-input';
 
-import { Row, Col, Navbar, Nav } from 'react-bootstrap';
+import { Row, Col, Navbar, Nav, Form } from 'react-bootstrap';
 /* import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button'; */
 
@@ -25,8 +32,7 @@ export class MainView extends React.Component {
         //super calls constructor on parent class (in this case "React.Component")
         super();
         this.state = {
-            movies: [],
-            user: null,
+            /* user: null, */
             userData: null,
             token: null,
             users: null
@@ -41,7 +47,7 @@ export class MainView extends React.Component {
                 token: localStorage.getItem('token')
             });
             this.getMovies(accessToken);
-            /*             this.getUsers(accessToken); */
+            /*             this.getUser(accessToken); */
         }
     }
 
@@ -50,23 +56,23 @@ export class MainView extends React.Component {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(response => {
-                this.setState({
-                    movies: response.data
-                });
+                this.props.setMovies(response.data);
+                console.log(response.data)
+                /*             this.setState({
+                                                    movies: response.data
+                            }); */
             })
             .catch(function (error) {
                 console.log(error);
             });
     }
 
-    /*     getUsers(token) {
-            axios.get('https://movie-app-alex-offner.herokuapp.com/users/' + this.state.user, {
+    /*     getUser(token) {
+            axios.get('https://movie-app-alex-offner.herokuapp.com/users/' + localStorage.getItem('user'), {
                 headers: { Authorization: `Bearer ${token}` }
             })
                 .then(response => {
-                    this.setState({
-                        users: response.data
-                    });
+                    this.props.setUser(response.data);
                     console.log(response.data)
                 })
                 .catch(function (error) {
@@ -76,6 +82,7 @@ export class MainView extends React.Component {
 
     onLoggedIn(authData) {
         console.log(authData);
+        /*         this.props.setUser(authData.user); */
         this.setState({
             user: authData.user.username
         });
@@ -88,6 +95,7 @@ export class MainView extends React.Component {
     onLoggedOut() {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
+        /*         this.props.setUser(null); */
         this.setState({
             user: null
         });
@@ -95,7 +103,8 @@ export class MainView extends React.Component {
 
     render() {
         //object destruction for const movies = this.state.movies
-        const { movies, userData, user, token } = this.state;
+        const { userData, user, token } = this.state;
+        let { movies, visibilityFilter, /* user */ } = this.props;
 
         return (
             <Router>
@@ -103,6 +112,11 @@ export class MainView extends React.Component {
                 <Navbar fixed="top" bg="primary" variant="dark">
                     <Navbar.Brand href="/">MyFlix</Navbar.Brand>
                     <Nav className="ml-auto">
+                        {user &&
+                            <Form className="form-inline my-2 my-lg-0">
+                                <VisibilityFilterInput visibilityFilter={visibilityFilter} />
+                            </Form>
+                        }
                         {user && <Nav.Link href="/">Movies</Nav.Link>}
                         {user && <Nav.Link href={`/users/${this.state.user}`}>User profile</Nav.Link>}
                         {!user && <Nav.Link href="register">Register</Nav.Link>}
@@ -120,11 +134,12 @@ export class MainView extends React.Component {
                         if (movies.length === 0) return (
                             <div className="main-view" />
                         )
-                        return movies.map(m => (
-                            <Col md={3} key={m._id}>
-                                <MovieCard movie={m} />
-                            </Col>
-                        ))
+                        /*                         return movies.map(m => (
+                                                    <Col md={3} key={m._id}>
+                                                        <MovieCard movie={m} />
+                                                    </Col>
+                                                )) */
+                        return <MoviesList movies={movies} />;
                     }} />
 
                     <Route path="/register" render={() => {
@@ -185,6 +200,14 @@ export class MainView extends React.Component {
     }
 }
 
+let mapStateToProps = state => {
+    const { visibilityFilter } = state;
+    return {
+        movies: state.movies,
+        visibilityFilter
+    }
+}
+
 
 //allows to export a default value, but only one is possible in the application
-export default MainView;
+export default connect(mapStateToProps, { setMovies })(MainView);

@@ -5,6 +5,10 @@ import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import { Form, FormControl, Card, Row, Col } from 'react-bootstrap';
 
+import { connect } from 'react-redux';
+import { setNewUser } from '../../actions/actions';
+import { updateUser } from '../../actions/actions';
+
 import { Link } from 'react-router-dom';
 
 export class ProfileView extends React.Component {
@@ -33,6 +37,7 @@ export class ProfileView extends React.Component {
     componentDidMount() {
         let token = localStorage.getItem("token");
         this.getUser(token);
+        console.log(this.props);
     }
 
     getUser(token) {
@@ -40,6 +45,7 @@ export class ProfileView extends React.Component {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(response => {
+                //this.props.setNewUser(response.data);
                 this.setState({
                     user: response.data
                 });
@@ -161,13 +167,13 @@ export class ProfileView extends React.Component {
     }
 
     render() {
-        const { movies } = this.props;
+        const { movies, newUser } = this.props;
         const { usernameErr, passwordErr, emailErr } = this.state;
-        console.log(movies);
+        // console.log(movies);
         const ListOfFavouriteMovies = movies.filter((movie) => {
             return this.state.user.favouriteMovies.includes(movie._id);
         });
-        console.log(this.props);
+        // console.log(this.props);
         return (
             <div className="profile-view">
                 <div className="profile-username">
@@ -270,5 +276,11 @@ export class ProfileView extends React.Component {
 
 }
 
-ProfileView.propTypes = {
+let mapStateToProps = state => {
+    return { newUser: state.newUser }
 }
+
+export default connect(mapStateToProps, { setNewUser })(ProfileView);
+
+/* ProfileView.propTypes = {
+} */
