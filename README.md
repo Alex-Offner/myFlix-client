@@ -7,6 +7,8 @@ The user can view a list of different movies, get information on them and learn 
 The app is responsive and runs on multible devices.
 <p>
   
+ ![](images/myFlix_demo.png)
+  
 # Overview
   
   ## MainView
