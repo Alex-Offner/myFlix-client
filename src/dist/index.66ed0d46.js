@@ -21919,6 +21919,7 @@ class MainView extends _reactDefault.default.Component {
                 token: localStorage.getItem('token')
             });
             this.getMovies(accessToken);
+            this.getUser(accessToken);
         /*             this.getUser(accessToken); */ }
     }
     getMovies(token) {
@@ -21928,48 +21929,50 @@ class MainView extends _reactDefault.default.Component {
             }
         }).then((response)=>{
             this.props.setMovies(response.data);
-            console.log(response.data);
-        /*             this.setState({
+        /* console.log(response.data) */ /*             this.setState({
                                                     movies: response.data
                             }); */ }).catch(function(error) {
             console.log(error);
         });
     }
-    /*     getUser(token) {
-            axios.get('https://movie-app-alex-offner.herokuapp.com/users/' + localStorage.getItem('user'), {
-                headers: { Authorization: `Bearer ${token}` }
-            })
-                .then(response => {
-                    this.props.setUser(response.data);
-                    console.log(response.data)
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        } */ onLoggedIn(authData) {
-        console.log(authData);
-        /*         this.props.setUser(authData.user); */ this.setState({
-            user: authData.user.username
+    getUser(token) {
+        _axiosDefault.default.get('https://movie-app-alex-offner.herokuapp.com/users/' + localStorage.getItem('user'), {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).then((response)=>{
+            this.props.setUser(response.data);
+        /* console.log(response.data) */ }).catch(function(error) {
+            console.log(error);
         });
-        localStorage.setItem('token', authData.token);
+    }
+    onLoggedIn(authData) {
+        console.log(authData);
+        this.props.setUser(authData.user);
+        /*    this.setState({
+               user: authData.user.username
+           }); */ localStorage.setItem('token', authData.token);
         localStorage.setItem('user', authData.user.username);
         this.getMovies(authData.token);
+        this.props.getUser(authData.user);
+        window.open(`/movies`, '_self');
     }
     onLoggedOut() {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        /*         this.props.setUser(null); */ this.setState({
-            user: null
-        });
-    }
+        this.props.setUser(null);
+        window.open(`/`, '_self');
+    /*         this.setState({
+                    user: null
+                }); */ }
     render() {
         //object destruction for const movies = this.state.movies
-        const { userData , user , token  } = this.state;
-        let { movies , visibilityFilter  } = this.props;
+        const { token  } = this.state;
+        let { movies , visibilityFilter , user  } = this.props;
         return(/*#__PURE__*/ _reactDefault.default.createElement(_reactRouterDom.BrowserRouter, {
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\main-view\\main-view.jsx",
-                lineNumber: 110
+                lineNumber: 115
             },
             __self: this
         }, /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Navbar, {
@@ -21978,63 +21981,63 @@ class MainView extends _reactDefault.default.Component {
             variant: "dark",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\main-view\\main-view.jsx",
-                lineNumber: 112
+                lineNumber: 117
             },
             __self: this
         }, /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Navbar.Brand, {
             href: "/",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\main-view\\main-view.jsx",
-                lineNumber: 113
+                lineNumber: 118
             },
             __self: this
         }, "MyFlix"), /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Nav, {
             className: "ml-auto",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\main-view\\main-view.jsx",
-                lineNumber: 114
+                lineNumber: 119
             },
             __self: this
-        }, user && /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Form, {
+        }, user.username ? /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Form, {
             className: "form-inline my-2 my-lg-0",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\main-view\\main-view.jsx",
-                lineNumber: 116
+                lineNumber: 121
             },
             __self: this
         }, /*#__PURE__*/ _reactDefault.default.createElement(_visibilityFilterInputDefault.default, {
             visibilityFilter: visibilityFilter,
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\main-view\\main-view.jsx",
-                lineNumber: 117
-            },
-            __self: this
-        })), user && /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Nav.Link, {
-            href: "/",
-            __source: {
-                fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\main-view\\main-view.jsx",
-                lineNumber: 120
-            },
-            __self: this
-        }, "Movies"), user && /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Nav.Link, {
-            href: `/users/${this.state.user}`,
-            __source: {
-                fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\main-view\\main-view.jsx",
-                lineNumber: 121
-            },
-            __self: this
-        }, "User profile"), !user && /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Nav.Link, {
-            href: "register",
-            __source: {
-                fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\main-view\\main-view.jsx",
                 lineNumber: 122
             },
             __self: this
-        }, "Register"), user === null ? /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Nav.Link, {
+        })) : null, user.username ? /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Nav.Link, {
             href: "/",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\main-view\\main-view.jsx",
-                lineNumber: 124
+                lineNumber: 125
+            },
+            __self: this
+        }, "Movies") : null, user.username ? /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Nav.Link, {
+            href: `/users/${user.username}`,
+            __source: {
+                fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\main-view\\main-view.jsx",
+                lineNumber: 126
+            },
+            __self: this
+        }, "User profile") : null, !user.username && /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Nav.Link, {
+            href: "/register",
+            __source: {
+                fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\main-view\\main-view.jsx",
+                lineNumber: 127
+            },
+            __self: this
+        }, "Register"), !user.username ? /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Nav.Link, {
+            href: "/",
+            __source: {
+                fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\main-view\\main-view.jsx",
+                lineNumber: 129
             },
             __self: this
         }, "Log in") : /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Nav.Link, {
@@ -22043,45 +22046,41 @@ class MainView extends _reactDefault.default.Component {
             ,
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\main-view\\main-view.jsx",
-                lineNumber: 125
+                lineNumber: 130
             },
             __self: this
         }, "Sign out"))), /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Row, {
             className: "main-view justify-content-md-center",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\main-view\\main-view.jsx",
-                lineNumber: 129
+                lineNumber: 134
             },
             __self: this
         }, /*#__PURE__*/ _reactDefault.default.createElement(_reactRouterDom.Route, {
             exact: true,
             path: "/",
             render: ()=>{
-                if (!user) return(/*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Col, {
+                if (user === null || user.length <= 0) return(/*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Col, {
                     md: 5
                 }, /*#__PURE__*/ _reactDefault.default.createElement(_loginView.LoginView, {
                     onLoggedIn: (user1)=>this.onLoggedIn(user1)
                 })));
-                if (movies.length === 0) return(/*#__PURE__*/ _reactDefault.default.createElement("div", {
+                if (movies.length === 0 || movies === null) return(/*#__PURE__*/ _reactDefault.default.createElement("div", {
                     className: "main-view"
                 }));
-                /*                         return movies.map(m => (
-                                                    <Col md={3} key={m._id}>
-                                                        <MovieCard movie={m} />
-                                                    </Col>
-                                                )) */ return(/*#__PURE__*/ _reactDefault.default.createElement(_moviesListDefault.default, {
+                return(/*#__PURE__*/ _reactDefault.default.createElement(_moviesListDefault.default, {
                     movies: movies
                 }));
             },
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\main-view\\main-view.jsx",
-                lineNumber: 130
+                lineNumber: 135
             },
             __self: this
         }), /*#__PURE__*/ _reactDefault.default.createElement(_reactRouterDom.Route, {
             path: "/register",
             render: ()=>{
-                if (user) return(/*#__PURE__*/ _reactDefault.default.createElement(_reactRouterDom.Redirect, {
+                if (user.username) return(/*#__PURE__*/ _reactDefault.default.createElement(_reactRouterDom.Redirect, {
                     to: "/"
                 }));
                 return(/*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Col, {
@@ -22097,7 +22096,7 @@ class MainView extends _reactDefault.default.Component {
             exact: true,
             path: "/movies/:movieId",
             render: ({ match , history  })=>{
-                if (!user) return(/*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Col, null, /*#__PURE__*/ _reactDefault.default.createElement(_loginView.LoginView, {
+                if (!user.username) return(/*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Col, null, /*#__PURE__*/ _reactDefault.default.createElement(_loginView.LoginView, {
                     onLoggedIn: (user1)=>this.onLoggedIn(user1)
                 })));
                 if (movies.length === 0) return(/*#__PURE__*/ _reactDefault.default.createElement("div", {
@@ -22119,7 +22118,7 @@ class MainView extends _reactDefault.default.Component {
         }), /*#__PURE__*/ _reactDefault.default.createElement(_reactRouterDom.Route, {
             path: "/director/:name",
             render: ({ match , history  })=>{
-                if (!user) return(/*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Col, null, /*#__PURE__*/ _reactDefault.default.createElement(_loginView.LoginView, {
+                if (!user.username) return(/*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Col, null, /*#__PURE__*/ _reactDefault.default.createElement(_loginView.LoginView, {
                     onLoggedIn: (user1)=>this.onLoggedIn(user1)
                 })));
                 if (movies.length === 0) return(/*#__PURE__*/ _reactDefault.default.createElement("div", {
@@ -22141,7 +22140,7 @@ class MainView extends _reactDefault.default.Component {
         }), /*#__PURE__*/ _reactDefault.default.createElement(_reactRouterDom.Route, {
             path: "/genre/:name",
             render: ({ match , history  })=>{
-                if (!user) return(/*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Col, null, /*#__PURE__*/ _reactDefault.default.createElement(_loginView.LoginView, {
+                if (!user.username) return(/*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Col, null, /*#__PURE__*/ _reactDefault.default.createElement(_loginView.LoginView, {
                     onLoggedIn: (user1)=>this.onLoggedIn(user1)
                 })));
                 if (movies.length === 0) return(/*#__PURE__*/ _reactDefault.default.createElement("div", {
@@ -22161,9 +22160,9 @@ class MainView extends _reactDefault.default.Component {
             },
             __self: this
         }), /*#__PURE__*/ _reactDefault.default.createElement(_reactRouterDom.Route, {
-            path: `/users/${this.state.user}`,
-            render: ({ match , history  })=>{
-                if (!user) return(/*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Col, null, /*#__PURE__*/ _reactDefault.default.createElement(_loginView.LoginView, {
+            path: `/users/${user.username}`,
+            render: ({ history  })=>{
+                if (!user.username) return(/*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Col, null, /*#__PURE__*/ _reactDefault.default.createElement(_loginView.LoginView, {
                     onLoggedIn: (user1)=>this.onLoggedIn(user1)
                 })));
                 return(/*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Col, {
@@ -22189,11 +22188,13 @@ let mapStateToProps = (state)=>{
     const { visibilityFilter  } = state;
     return {
         movies: state.movies,
+        user: state.user,
         visibilityFilter
     };
 };
 exports.default = _reactRedux.connect(mapStateToProps, {
-    setMovies: _actions.setMovies
+    setMovies: _actions.setMovies,
+    setUser: _actions.setUser
 })(MainView);
 
   helpers.postlude(module);
@@ -27344,6 +27345,8 @@ var _reactDefault = parcelHelpers.interopDefault(_react);
 var _loginViewScss = require("./login-view.scss");
 var _axios = require("axios");
 var _axiosDefault = parcelHelpers.interopDefault(_axios);
+var _propTypes = require("prop-types");
+var _propTypesDefault = parcelHelpers.interopDefault(_propTypes);
 var _reactRouterDom = require("react-router-dom");
 var _form = require("react-bootstrap/Form");
 var _formDefault = parcelHelpers.interopDefault(_form);
@@ -27405,36 +27408,31 @@ function LoginView(props) {
         setPasswordErr(passwordErr1);
         return isValid;
     };
-    /*     const moveToSignUp = (e) => {
-            e.preventDefault();
-            console.log('Moving to registration!');
-            props.onLoggedIn(true);
-            props.onRegistered(null);
-        } */ return(/*#__PURE__*/ _reactDefault.default.createElement(_formDefault.default, {
+    return(/*#__PURE__*/ _reactDefault.default.createElement(_formDefault.default, {
         ref: this.Form,
         className: "centered",
         __source: {
             fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\login-view\\login-view.jsx",
-            lineNumber: 83
+            lineNumber: 76
         },
         __self: this
     }, /*#__PURE__*/ _reactDefault.default.createElement("h1", {
         __source: {
             fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\login-view\\login-view.jsx",
-            lineNumber: 84
+            lineNumber: 77
         },
         __self: this
     }, "myFlix Login"), /*#__PURE__*/ _reactDefault.default.createElement(_formDefault.default.Group, {
         controlId: "formUsername",
         __source: {
             fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\login-view\\login-view.jsx",
-            lineNumber: 85
+            lineNumber: 78
         },
         __self: this
     }, /*#__PURE__*/ _reactDefault.default.createElement(_formDefault.default.Label, {
         __source: {
             fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\login-view\\login-view.jsx",
-            lineNumber: 86
+            lineNumber: 79
         },
         __self: this
     }, "Username:"), /*#__PURE__*/ _reactDefault.default.createElement(_formDefault.default.Control, {
@@ -27447,7 +27445,7 @@ function LoginView(props) {
         ,
         __source: {
             fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\login-view\\login-view.jsx",
-            lineNumber: 87
+            lineNumber: 80
         },
         __self: this
     })), Object.keys(usernameErr).map((key)=>{
@@ -27458,7 +27456,7 @@ function LoginView(props) {
             },
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\login-view\\login-view.jsx",
-                lineNumber: 90
+                lineNumber: 83
             },
             __self: this
         }, usernameErr[key]));
@@ -27466,13 +27464,13 @@ function LoginView(props) {
         controlId: "formPassword",
         __source: {
             fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\login-view\\login-view.jsx",
-            lineNumber: 92
+            lineNumber: 85
         },
         __self: this
     }, /*#__PURE__*/ _reactDefault.default.createElement(_formDefault.default.Label, {
         __source: {
             fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\login-view\\login-view.jsx",
-            lineNumber: 93
+            lineNumber: 86
         },
         __self: this
     }, "Password:"), /*#__PURE__*/ _reactDefault.default.createElement(_formDefault.default.Control, {
@@ -27485,7 +27483,7 @@ function LoginView(props) {
         ,
         __source: {
             fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\login-view\\login-view.jsx",
-            lineNumber: 94
+            lineNumber: 87
         },
         __self: this
     })), Object.keys(passwordErr).map((key)=>{
@@ -27496,7 +27494,7 @@ function LoginView(props) {
             },
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\login-view\\login-view.jsx",
-                lineNumber: 97
+                lineNumber: 90
             },
             __self: this
         }, passwordErr[key]));
@@ -27508,7 +27506,7 @@ function LoginView(props) {
             },
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\login-view\\login-view.jsx",
-                lineNumber: 100
+                lineNumber: 93
             },
             __self: this
         }, userExists[key]));
@@ -27516,7 +27514,7 @@ function LoginView(props) {
         className: "button",
         __source: {
             fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\login-view\\login-view.jsx",
-            lineNumber: 102
+            lineNumber: 95
         },
         __self: this
     }, /*#__PURE__*/ _reactDefault.default.createElement(_buttonDefault.default, {
@@ -27525,52 +27523,55 @@ function LoginView(props) {
         onClick: handleSubmit,
         __source: {
             fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\login-view\\login-view.jsx",
-            lineNumber: 103
+            lineNumber: 96
         },
         __self: this
     }, "Submit")), /*#__PURE__*/ _reactDefault.default.createElement("br", {
         __source: {
             fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\login-view\\login-view.jsx",
-            lineNumber: 107
+            lineNumber: 100
         },
         __self: this
     }), /*#__PURE__*/ _reactDefault.default.createElement("p", {
         __source: {
             fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\login-view\\login-view.jsx",
-            lineNumber: 108
+            lineNumber: 101
         },
         __self: this
     }, "or register here"), /*#__PURE__*/ _reactDefault.default.createElement("br", {
         __source: {
             fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\login-view\\login-view.jsx",
-            lineNumber: 109
+            lineNumber: 102
         },
         __self: this
     }), /*#__PURE__*/ _reactDefault.default.createElement("div", {
         className: "button",
         __source: {
             fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\login-view\\login-view.jsx",
-            lineNumber: 110
+            lineNumber: 103
         },
         __self: this
     }, /*#__PURE__*/ _reactDefault.default.createElement(_reactRouterDom.Link, {
         to: `/register`,
         __source: {
             fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\login-view\\login-view.jsx",
-            lineNumber: 111
+            lineNumber: 104
         },
         __self: this
     }, /*#__PURE__*/ _reactDefault.default.createElement(_buttonDefault.default, {
         variant: "info",
         __source: {
             fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\login-view\\login-view.jsx",
-            lineNumber: 112
+            lineNumber: 105
         },
         __self: this
     }, "Sign Up")))));
 }
 _s(LoginView, "kz2EVTU3SriRXsLto39qW0XPZCo=");
 _c = LoginView;
+LoginView.propTypes = {
+    onLoggedIn: _propTypesDefault.default.func.isRequired
+};
 var _c;
 $RefreshReg$(_c, "LoginView");
 
@@ -27579,7 +27580,7 @@ $RefreshReg$(_c, "LoginView");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3b2NM","@parcel/transformer-js/src/esmodule-helpers.js":"4OAcP","../../../../../../AppData/Roaming/nvm/v14.16.1/node_modules/parcel/node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5aez5","./login-view.scss":"qgjHG","react-bootstrap/Form":"6A5ko","react-bootstrap/Button":"1ru0l","axios":"7rA65","react-router-dom":"1PMSK"}],"qgjHG":[function() {},{}],"6A5ko":[function(require,module,exports) {
+},{"react":"3b2NM","@parcel/transformer-js/src/esmodule-helpers.js":"4OAcP","../../../../../../AppData/Roaming/nvm/v14.16.1/node_modules/parcel/node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5aez5","./login-view.scss":"qgjHG","react-bootstrap/Form":"6A5ko","react-bootstrap/Button":"1ru0l","axios":"7rA65","react-router-dom":"1PMSK","prop-types":"4dfy5"}],"qgjHG":[function() {},{}],"6A5ko":[function(require,module,exports) {
 "use strict";
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 exports.__esModule = true;
@@ -28725,11 +28726,7 @@ try {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "RegistrationView", ()=>RegistrationView
-); /*
-RegistrationView.propTypes = {
-    onRegistered: PropTypes.func.isRequired,
-    onLoggedIn: PropTypes.func.isRequired
-}; */ 
+);
 var _react = require("react");
 var _reactDefault = parcelHelpers.interopDefault(_react);
 var _registrationViewScss = require("./registration-view.scss");
@@ -29232,51 +29229,47 @@ var _reactBootstrap = require("react-bootstrap");
 var _reactRedux = require("react-redux");
 var _actions = require("../../actions/actions");
 var _reactRouterDom = require("react-router-dom");
+var _image = require("react-bootstrap/esm/Image");
 class ProfileView extends _reactDefault.default.Component {
     constructor(props){
         super(props);
         this.state = {
-            user: {
-                username: "",
-                password: "",
-                birthday: "",
-                email: "",
-                _id: "",
-                favouriteMovies: []
-            },
-            usernameErr: "",
+            /*             user: {
+                            username: "",
+                            password: "",
+                            birthday: "",
+                            email: "",
+                            _id: "",
+                            favouriteMovies: [],
+            
+                        }, */ usernameErr: "",
             passwordErr: "",
-            emailErr: "",
-            username: "",
-            password: "",
-            email: ""
+            emailErr: ""
         };
     }
     componentDidMount() {
         let token = localStorage.getItem("token");
-        this.getUser(token);
-        console.log(this.props);
+        /*         this.getUser(token); */ console.log(this.props);
     }
-    getUser(token) {
-        _axiosDefault.default.get('https://movie-app-alex-offner.herokuapp.com/users/' + this.props.user, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        }).then((response)=>{
-            //this.props.setNewUser(response.data);
-            this.setState({
-                user: response.data
-            });
-            console.log(response.data);
-        }).catch(function(error) {
-            console.log(error);
-        });
-    }
-    handleUpdate(e) {
+    /*     getUser(token) {
+            axios.get('https://movie-app-alex-offner.herokuapp.com/users/' + this.props.user, {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+                .then(response => {
+                    //this.props.setNewUser(response.data);
+                    this.setState({
+                        user: response.data
+                    });
+                    console.log(response.data)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        } */ handleUpdate(e) {
         let user = localStorage.getItem("user");
         let token = localStorage.getItem("token");
         const isValid = this.formValidation();
-        if (isValid) _axiosDefault.default.put('https://movie-app-alex-offner.herokuapp.com/users/' + this.props.user, {
+        if (isValid) _axiosDefault.default.put('https://movie-app-alex-offner.herokuapp.com/users/' + user, {
             username: this.state.username,
             password: this.state.password,
             email: this.state.email,
@@ -29300,7 +29293,7 @@ class ProfileView extends _reactDefault.default.Component {
         if (confirmAction) {
             let token = localStorage.getItem("token");
             let user = localStorage.getItem("user");
-            _axiosDefault.default.delete('https://movie-app-alex-offner.herokuapp.com/users/' + this.props.user, {
+            _axiosDefault.default.delete('https://movie-app-alex-offner.herokuapp.com/users/' + user, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -29324,8 +29317,8 @@ class ProfileView extends _reactDefault.default.Component {
         }).then((response)=>{
             console.log(response);
             alert(movie.Title + " has been removed from your list if favourites!");
-            this.componentDidMount();
-        });
+            window.location.pathname = `/users/${user}`;
+        /* this.componentDidMount(); */ });
     }
     handleChange(e) {
         let { name , value  } = e.target;
@@ -29371,87 +29364,87 @@ class ProfileView extends _reactDefault.default.Component {
         return isValid;
     }
     render() {
-        const { movies , newUser  } = this.props;
+        const { movies , user  } = this.props;
         const { usernameErr , passwordErr , emailErr  } = this.state;
         // console.log(movies);
         const ListOfFavouriteMovies = movies.filter((movie)=>{
-            return this.state.user.favouriteMovies.includes(movie._id);
+            return user.favouriteMovies.includes(movie._id);
         });
         // console.log(this.props);
         return(/*#__PURE__*/ _reactDefault.default.createElement("div", {
             className: "profile-view",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 178
+                lineNumber: 181
             },
             __self: this
         }, /*#__PURE__*/ _reactDefault.default.createElement("div", {
             className: "profile-username",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 179
+                lineNumber: 182
             },
             __self: this
         }, /*#__PURE__*/ _reactDefault.default.createElement("span", {
             className: "headline",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 180
+                lineNumber: 183
             },
             __self: this
         }, "Username: "), /*#__PURE__*/ _reactDefault.default.createElement("span", {
             className: "title",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 181
+                lineNumber: 184
             },
             __self: this
-        }, this.state.user.username)), /*#__PURE__*/ _reactDefault.default.createElement("div", {
+        }, user.username)), /*#__PURE__*/ _reactDefault.default.createElement("div", {
             className: "profile-email",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 183
+                lineNumber: 186
             },
             __self: this
         }, /*#__PURE__*/ _reactDefault.default.createElement("span", {
             className: "headline",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 184
+                lineNumber: 187
             },
             __self: this
         }, "Email: "), /*#__PURE__*/ _reactDefault.default.createElement("span", {
             className: "title",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 185
+                lineNumber: 188
             },
             __self: this
-        }, this.state.user.email)), /*#__PURE__*/ _reactDefault.default.createElement("div", {
+        }, user.email)), /*#__PURE__*/ _reactDefault.default.createElement("div", {
             className: "profile-birthday",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 187
+                lineNumber: 191
             },
             __self: this
         }, /*#__PURE__*/ _reactDefault.default.createElement("span", {
             className: "headline",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 188
+                lineNumber: 192
             },
             __self: this
         }, "Birthday: "), /*#__PURE__*/ _reactDefault.default.createElement("span", {
             className: "title",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 189
+                lineNumber: 193
             },
             __self: this
-        }, this.state.user.birthday)), /*#__PURE__*/ _reactDefault.default.createElement("br", {
+        }, user.birthday)), /*#__PURE__*/ _reactDefault.default.createElement("br", {
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 191
+                lineNumber: 195
             },
             __self: this
         }), /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Card.Text, {
@@ -29459,13 +29452,13 @@ class ProfileView extends _reactDefault.default.Component {
             as: "h3",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 192
+                lineNumber: 196
             },
             __self: this
         }, "Favourite Movies:"), /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Row, {
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 193
+                lineNumber: 197
             },
             __self: this
         }, ListOfFavouriteMovies.map((movie)=>{
@@ -29474,20 +29467,20 @@ class ProfileView extends _reactDefault.default.Component {
                 key: movie._id,
                 __source: {
                     fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                    lineNumber: 196
+                    lineNumber: 200
                 },
                 __self: this
             }, /*#__PURE__*/ _reactDefault.default.createElement("div", {
                 key: movie._id,
                 __source: {
                     fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                    lineNumber: 197
+                    lineNumber: 201
                 },
                 __self: this
             }, /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Card, {
                 __source: {
                     fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                    lineNumber: 198
+                    lineNumber: 202
                 },
                 __self: this
             }, /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Card.Img, {
@@ -29495,26 +29488,26 @@ class ProfileView extends _reactDefault.default.Component {
                 src: movie.ImagePath,
                 __source: {
                     fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                    lineNumber: 199
+                    lineNumber: 203
                 },
                 __self: this
             }), /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Card.Body, {
                 __source: {
                     fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                    lineNumber: 200
+                    lineNumber: 204
                 },
                 __self: this
             }, /*#__PURE__*/ _reactDefault.default.createElement(_reactRouterDom.Link, {
                 to: `/movies/${movie._id}`,
                 __source: {
                     fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                    lineNumber: 201
+                    lineNumber: 205
                 },
                 __self: this
             }, /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Card.Title, {
                 __source: {
                     fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                    lineNumber: 202
+                    lineNumber: 206
                 },
                 __self: this
             }, movie.Title)), /*#__PURE__*/ _reactDefault.default.createElement(_buttonDefault.default, {
@@ -29523,47 +29516,47 @@ class ProfileView extends _reactDefault.default.Component {
                 ,
                 __source: {
                     fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                    lineNumber: 204
+                    lineNumber: 208
                 },
                 __self: this
             }, "Remove Movie"))))));
         })), /*#__PURE__*/ _reactDefault.default.createElement("br", {
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 212
+                lineNumber: 216
             },
             __self: this
         }), /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Form, {
             className: "justify-content-md-center",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 214
+                lineNumber: 218
             },
             __self: this
         }, /*#__PURE__*/ _reactDefault.default.createElement("h3", {
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 215
+                lineNumber: 219
             },
             __self: this
         }, "Update your Profile Details"), /*#__PURE__*/ _reactDefault.default.createElement("div", {
             className: "profile-form",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 217
+                lineNumber: 221
             },
             __self: this
         }, /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Form.Group, {
             controlid: "formUsername",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 218
+                lineNumber: 222
             },
             __self: this
         }, /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Form.Label, {
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 219
+                lineNumber: 223
             },
             __self: this
         }, "Username: "), /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.FormControl, {
@@ -29575,7 +29568,7 @@ class ProfileView extends _reactDefault.default.Component {
             ,
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 220
+                lineNumber: 224
             },
             __self: this
         })), Object.keys(usernameErr).map((key)=>{
@@ -29586,7 +29579,7 @@ class ProfileView extends _reactDefault.default.Component {
                 },
                 __source: {
                     fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                    lineNumber: 223
+                    lineNumber: 227
                 },
                 __self: this
             }, usernameErr[key]));
@@ -29594,13 +29587,13 @@ class ProfileView extends _reactDefault.default.Component {
             controlid: "formPassword",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 226
+                lineNumber: 230
             },
             __self: this
         }, /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Form.Label, {
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 227
+                lineNumber: 231
             },
             __self: this
         }, "Password: "), /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.FormControl, {
@@ -29612,7 +29605,7 @@ class ProfileView extends _reactDefault.default.Component {
             ,
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 228
+                lineNumber: 232
             },
             __self: this
         })), Object.keys(passwordErr).map((key)=>{
@@ -29623,7 +29616,7 @@ class ProfileView extends _reactDefault.default.Component {
                 },
                 __source: {
                     fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                    lineNumber: 231
+                    lineNumber: 235
                 },
                 __self: this
             }, passwordErr[key]));
@@ -29631,13 +29624,13 @@ class ProfileView extends _reactDefault.default.Component {
             controlid: "formEmail",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 234
+                lineNumber: 238
             },
             __self: this
         }, /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Form.Label, {
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 235
+                lineNumber: 239
             },
             __self: this
         }, "Email: "), /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.FormControl, {
@@ -29649,7 +29642,7 @@ class ProfileView extends _reactDefault.default.Component {
             ,
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 236
+                lineNumber: 240
             },
             __self: this
         })), Object.keys(emailErr).map((key)=>{
@@ -29660,7 +29653,7 @@ class ProfileView extends _reactDefault.default.Component {
                 },
                 __source: {
                     fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                    lineNumber: 239
+                    lineNumber: 243
                 },
                 __self: this
             }, emailErr[key]));
@@ -29668,13 +29661,13 @@ class ProfileView extends _reactDefault.default.Component {
             controlid: "formBirthday",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 242
+                lineNumber: 246
             },
             __self: this
         }, /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.Form.Label, {
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 243
+                lineNumber: 247
             },
             __self: this
         }, "Birthday: "), /*#__PURE__*/ _reactDefault.default.createElement(_reactBootstrap.FormControl, {
@@ -29685,7 +29678,7 @@ class ProfileView extends _reactDefault.default.Component {
             ,
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 244
+                lineNumber: 248
             },
             __self: this
         })), /*#__PURE__*/ _reactDefault.default.createElement(_buttonDefault.default, {
@@ -29695,51 +29688,51 @@ class ProfileView extends _reactDefault.default.Component {
             ,
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 248
+                lineNumber: 252
             },
             __self: this
         }, "Save changes"), /*#__PURE__*/ _reactDefault.default.createElement("br", {
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 254
+                lineNumber: 258
             },
             __self: this
         }), /*#__PURE__*/ _reactDefault.default.createElement("br", {
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 255
+                lineNumber: 259
             },
             __self: this
         }), /*#__PURE__*/ _reactDefault.default.createElement(_reactRouterDom.Link, {
             to: `/`,
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 256
+                lineNumber: 260
             },
             __self: this
         }, /*#__PURE__*/ _reactDefault.default.createElement(_buttonDefault.default, {
             variant: "info",
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 257
+                lineNumber: 261
             },
             __self: this
         }, "Back")), /*#__PURE__*/ _reactDefault.default.createElement("br", {
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 259
+                lineNumber: 263
             },
             __self: this
         }), /*#__PURE__*/ _reactDefault.default.createElement("br", {
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 260
+                lineNumber: 264
             },
             __self: this
         }), /*#__PURE__*/ _reactDefault.default.createElement("br", {
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 261
+                lineNumber: 265
             },
             __self: this
         }), /*#__PURE__*/ _reactDefault.default.createElement(_buttonDefault.default, {
@@ -29750,7 +29743,7 @@ class ProfileView extends _reactDefault.default.Component {
             ,
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\profile-view\\profile-view.jsx",
-                lineNumber: 262
+                lineNumber: 266
             },
             __self: this
         }, "Delete Account")))));
@@ -29763,15 +29756,36 @@ let mapStateToProps = (state)=>{
 };
 exports.default = _reactRedux.connect(mapStateToProps, {
     setNewUser: _actions.setNewUser
-})(ProfileView); /* ProfileView.propTypes = {
-} */ 
+})(ProfileView);
+ProfileView.propTypes = {
+    user: _propTypesDefault.default.shape({
+        username: _propTypesDefault.default.string.isRequired,
+        password: _propTypesDefault.default.string.isRequired,
+        email: _propTypesDefault.default.string.isRequired,
+        birthday: _propTypesDefault.default.string
+    }).isRequired,
+    token: _propTypesDefault.default.string.isRequired,
+    movies: _propTypesDefault.default.arrayOf(_propTypesDefault.default.shape({
+        Title: _propTypesDefault.default.string.isRequired,
+        Description: _propTypesDefault.default.string.isRequired,
+        ImagePath: _propTypesDefault.default.string.isRequired,
+        Director: _propTypesDefault.default.shape({
+            Name: _propTypesDefault.default.string
+        }).isRequired,
+        Drama: _propTypesDefault.default.shape({
+            Name: _propTypesDefault.default.string
+        })
+    })).isrequired,
+    onLoggedIn: _propTypesDefault.default.func.isRequired,
+    onBackClick: _propTypesDefault.default.func.isRequired
+};
 
   helpers.postlude(module);
 } finally {
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3b2NM","prop-types":"4dfy5","./profile-view.scss":"Txp7v","react-bootstrap/Button":"1ru0l","axios":"7rA65","react-router-dom":"1PMSK","@parcel/transformer-js/src/esmodule-helpers.js":"4OAcP","../../../../../../AppData/Roaming/nvm/v14.16.1/node_modules/parcel/node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5aez5","react-bootstrap":"4n7hB","react-redux":"7GDa4","../../actions/actions":"5S6cN"}],"Txp7v":[function() {},{}],"4n7hB":[function(require,module,exports) {
+},{"react":"3b2NM","prop-types":"4dfy5","./profile-view.scss":"Txp7v","react-bootstrap/Button":"1ru0l","axios":"7rA65","react-router-dom":"1PMSK","@parcel/transformer-js/src/esmodule-helpers.js":"4OAcP","../../../../../../AppData/Roaming/nvm/v14.16.1/node_modules/parcel/node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5aez5","react-bootstrap":"4n7hB","react-redux":"7GDa4","../../actions/actions":"5S6cN","react-bootstrap/esm/Image":"rzPO3"}],"Txp7v":[function() {},{}],"4n7hB":[function(require,module,exports) {
 "use strict";
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 exports.__esModule = true;
@@ -41822,20 +41836,15 @@ parcelHelpers.export(exports, "SET_FILTER", ()=>SET_FILTER
 );
 parcelHelpers.export(exports, "SET_USER", ()=>SET_USER
 );
-parcelHelpers.export(exports, "UPDATE_USER", ()=>UPDATE_USER
-);
 parcelHelpers.export(exports, "setMovies", ()=>setMovies
 );
 parcelHelpers.export(exports, "setFilter", ()=>setFilter
 );
 parcelHelpers.export(exports, "setUser", ()=>setUser
 );
-parcelHelpers.export(exports, "updateUser", ()=>updateUser
-);
 const SET_MOVIES = 'SET_MOVIES';
 const SET_FILTER = 'SET_FILTER';
 const SET_USER = 'SET_USER';
-const UPDATE_USER = 'UPDATE_USER';
 function setMovies(value) {
     return {
         type: SET_MOVIES,
@@ -41855,15 +41864,157 @@ function setUser(value) {
         value
     };
 }
-function updateUser(value) {
-    console.log('UPDATE_USER action called');
-    return {
-        type: UPDATE_USER,
-        value
-    };
-}
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"4OAcP"}],"6hLXm":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"4OAcP"}],"rzPO3":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "propTypes", ()=>propTypes
+);
+var _extends = require("@babel/runtime/helpers/esm/extends");
+var _extendsDefault = parcelHelpers.interopDefault(_extends);
+var _objectWithoutPropertiesLoose = require("@babel/runtime/helpers/esm/objectWithoutPropertiesLoose");
+var _objectWithoutPropertiesLooseDefault = parcelHelpers.interopDefault(_objectWithoutPropertiesLoose);
+var _classnames = require("classnames");
+var _classnamesDefault = parcelHelpers.interopDefault(_classnames);
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _propTypes = require("prop-types");
+var _propTypesDefault = parcelHelpers.interopDefault(_propTypes);
+var _themeProvider = require("./ThemeProvider");
+var _excluded = [
+    "bsPrefix",
+    "className",
+    "fluid",
+    "rounded",
+    "roundedCircle",
+    "thumbnail"
+];
+var propTypes = {
+    /**
+   * @default 'img'
+   */ bsPrefix: _propTypesDefault.default.string,
+    /**
+   * Sets image as fluid image.
+   */ fluid: _propTypesDefault.default.bool,
+    /**
+   * Sets image shape as rounded.
+   */ rounded: _propTypesDefault.default.bool,
+    /**
+   * Sets image shape as circle.
+   */ roundedCircle: _propTypesDefault.default.bool,
+    /**
+   * Sets image shape as thumbnail.
+   */ thumbnail: _propTypesDefault.default.bool
+};
+var defaultProps = {
+    fluid: false,
+    rounded: false,
+    roundedCircle: false,
+    thumbnail: false
+};
+var Image1 = /*#__PURE__*/ _reactDefault.default.forwardRef(function(_ref, ref) {
+    var bsPrefix = _ref.bsPrefix, className = _ref.className, fluid = _ref.fluid, rounded = _ref.rounded, roundedCircle = _ref.roundedCircle, thumbnail = _ref.thumbnail, props = _objectWithoutPropertiesLooseDefault.default(_ref, _excluded);
+    bsPrefix = _themeProvider.useBootstrapPrefix(bsPrefix, 'img');
+    var classes = _classnamesDefault.default(fluid && bsPrefix + "-fluid", rounded && "rounded", roundedCircle && "rounded-circle", thumbnail && bsPrefix + "-thumbnail");
+    return(/*#__PURE__*/ _reactDefault.default.createElement("img", _extendsDefault.default({
+        // eslint-disable-line jsx-a11y/alt-text
+        ref: ref
+    }, props, {
+        className: _classnamesDefault.default(className, classes)
+    })));
+});
+Image1.displayName = 'Image';
+Image1.defaultProps = defaultProps;
+exports.default = Image1;
+
+},{"@babel/runtime/helpers/esm/extends":"5qnVv","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"6rNIl","classnames":"5aJRc","react":"3b2NM","prop-types":"4dfy5","./ThemeProvider":"6Pzum","@parcel/transformer-js/src/esmodule-helpers.js":"4OAcP"}],"5qnVv":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+function _extends() {
+    _extends = Object.assign || function(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
+        }
+        return target;
+    };
+    return _extends.apply(this, arguments);
+}
+exports.default = _extends;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"4OAcP"}],"6rNIl":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+function _objectWithoutPropertiesLoose(source, excluded) {
+    if (source == null) return {
+    };
+    var target = {
+    };
+    var sourceKeys = Object.keys(source);
+    var key, i;
+    for(i = 0; i < sourceKeys.length; i++){
+        key = sourceKeys[i];
+        if (excluded.indexOf(key) >= 0) continue;
+        target[key] = source[key];
+    }
+    return target;
+}
+exports.default = _objectWithoutPropertiesLoose;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"4OAcP"}],"6Pzum":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "useBootstrapPrefix", ()=>useBootstrapPrefix
+);
+parcelHelpers.export(exports, "createBootstrapComponent", ()=>createBootstrapComponent
+);
+parcelHelpers.export(exports, "ThemeConsumer", ()=>Consumer
+);
+var _extends = require("@babel/runtime/helpers/esm/extends");
+var _extendsDefault = parcelHelpers.interopDefault(_extends);
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var ThemeContext = /*#__PURE__*/ _reactDefault.default.createContext({
+});
+var Consumer = ThemeContext.Consumer, Provider = ThemeContext.Provider;
+function ThemeProvider(_ref) {
+    var prefixes = _ref.prefixes, children = _ref.children;
+    var copiedPrefixes = _react.useMemo(function() {
+        return _extendsDefault.default({
+        }, prefixes);
+    }, [
+        prefixes
+    ]);
+    return(/*#__PURE__*/ _reactDefault.default.createElement(Provider, {
+        value: copiedPrefixes
+    }, children));
+}
+function useBootstrapPrefix(prefix, defaultPrefix) {
+    var prefixes = _react.useContext(ThemeContext);
+    return prefix || prefixes[defaultPrefix] || defaultPrefix;
+}
+function createBootstrapComponent(Component, opts) {
+    if (typeof opts === 'string') opts = {
+        prefix: opts
+    };
+    var isClassy = Component.prototype && Component.prototype.isReactComponent; // If it's a functional component make sure we don't break it with a ref
+    var _opts = opts, prefix = _opts.prefix, _opts$forwardRefAs = _opts.forwardRefAs, forwardRefAs = _opts$forwardRefAs === void 0 ? isClassy ? 'ref' : 'innerRef' : _opts$forwardRefAs;
+    var Wrapped = /*#__PURE__*/ _reactDefault.default.forwardRef(function(_ref2, ref) {
+        var props = _extendsDefault.default({
+        }, _ref2);
+        props[forwardRefAs] = ref;
+        var bsPrefix = useBootstrapPrefix(props.bsPrefix, prefix);
+        return(/*#__PURE__*/ _reactDefault.default.createElement(Component, _extendsDefault.default({
+        }, props, {
+            bsPrefix: bsPrefix
+        })));
+    });
+    Wrapped.displayName = "Bootstrap(" + (Component.displayName || Component.name) + ")";
+    return Wrapped;
+}
+exports.default = ThemeProvider;
+
+},{"@babel/runtime/helpers/esm/extends":"5qnVv","react":"3b2NM","@parcel/transformer-js/src/esmodule-helpers.js":"4OAcP"}],"6hLXm":[function(require,module,exports) {
 var helpers = require("../../../../../../AppData/Roaming/nvm/v14.16.1/node_modules/parcel/node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -41877,6 +42028,8 @@ var _reactDefault = parcelHelpers.interopDefault(_react);
 var _col = require("react-bootstrap/Col");
 var _colDefault = parcelHelpers.interopDefault(_col);
 var _reactRedux = require("react-redux");
+var _image = require("react-bootstrap/esm/Image");
+var _imageDefault = parcelHelpers.interopDefault(_image);
 var _movieCard = require("../movie-card/movie-card");
 const mapStateToProps = (state)=>{
     const { visibilityFilter  } = state;
@@ -41893,7 +42046,7 @@ function MoviesList(props) {
         className: "main-view",
         __source: {
             fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\movies-list\\movies-list.jsx",
-            lineNumber: 20
+            lineNumber: 21
         },
         __self: this
     }));
@@ -41902,14 +42055,14 @@ function MoviesList(props) {
             key: m._id,
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\movies-list\\movies-list.jsx",
-                lineNumber: 24
+                lineNumber: 25
             },
             __self: this
         }, /*#__PURE__*/ _reactDefault.default.createElement(_movieCard.MovieCard, {
             movie: m,
             __source: {
                 fileName: "C:\\Users\\AlexOffner\\Documents\\careerfoundry\\myFlix-client\\src\\components\\movies-list\\movies-list.jsx",
-                lineNumber: 25
+                lineNumber: 26
             },
             __self: this
         }))
@@ -41917,6 +42070,9 @@ function MoviesList(props) {
 }
 _c = MoviesList;
 exports.default = _reactRedux.connect(mapStateToProps)(MoviesList);
+MoviesList.propTypes = {
+    movies: _imageDefault.default.array
+};
 var _c;
 $RefreshReg$(_c, "MoviesList");
 
@@ -41925,7 +42081,7 @@ $RefreshReg$(_c, "MoviesList");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3b2NM","react-bootstrap/Col":"2D0r8","react-redux":"7GDa4","../movie-card/movie-card":"5GKpE","@parcel/transformer-js/src/esmodule-helpers.js":"4OAcP","../../../../../../AppData/Roaming/nvm/v14.16.1/node_modules/parcel/node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5aez5"}],"5GKpE":[function(require,module,exports) {
+},{"react":"3b2NM","react-bootstrap/Col":"2D0r8","react-redux":"7GDa4","../movie-card/movie-card":"5GKpE","@parcel/transformer-js/src/esmodule-helpers.js":"4OAcP","../../../../../../AppData/Roaming/nvm/v14.16.1/node_modules/parcel/node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5aez5","react-bootstrap/esm/Image":"rzPO3"}],"5GKpE":[function(require,module,exports) {
 var helpers = require("../../../../../../AppData/Roaming/nvm/v14.16.1/node_modules/parcel/node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -42635,9 +42791,6 @@ function user(state = [], action) {
     switch(action.type){
         case _actions.SET_USER:
             console.log('SET_USER reducer called');
-            return action.value;
-        case _actions.UPDATE_USER:
-            console.log('UPDATE_USER reducer called');
             return action.value;
         default:
             return state;

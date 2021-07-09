@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { string } from 'prop-types';
 import './profile-view.scss';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
@@ -7,61 +7,61 @@ import { Form, FormControl, Card, Row, Col } from 'react-bootstrap';
 
 import { connect } from 'react-redux';
 import { setNewUser } from '../../actions/actions';
-import { updateUser } from '../../actions/actions';
 
 import { Link } from 'react-router-dom';
+import { propTypes } from 'react-bootstrap/esm/Image';
 
 export class ProfileView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: {
-                username: "",
-                password: "",
-                birthday: "",
-                email: "",
-                _id: "",
-                favouriteMovies: [],
-
-            },
+            /*             user: {
+                            username: "",
+                            password: "",
+                            birthday: "",
+                            email: "",
+                            _id: "",
+                            favouriteMovies: [],
+            
+                        }, */
             usernameErr: "",
             passwordErr: "",
             emailErr: "",
-            username: "",
-            password: "",
-            email: ""
+            /*             username: "",
+                        password: "",
+                        email: "" */
         };
     }
 
 
     componentDidMount() {
         let token = localStorage.getItem("token");
-        this.getUser(token);
+        /*         this.getUser(token); */
         console.log(this.props);
     }
 
-    getUser(token) {
-        axios.get('https://movie-app-alex-offner.herokuapp.com/users/' + this.props.user, {
-            headers: { Authorization: `Bearer ${token}` }
-        })
-            .then(response => {
-                //this.props.setNewUser(response.data);
-                this.setState({
-                    user: response.data
-                });
-                console.log(response.data)
+    /*     getUser(token) {
+            axios.get('https://movie-app-alex-offner.herokuapp.com/users/' + this.props.user, {
+                headers: { Authorization: `Bearer ${token}` }
             })
-            .catch(function (error) {
-                console.log(error);
-            })
-    }
+                .then(response => {
+                    //this.props.setNewUser(response.data);
+                    this.setState({
+                        user: response.data
+                    });
+                    console.log(response.data)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        } */
 
     handleUpdate(e) {
         let user = localStorage.getItem("user");
         let token = localStorage.getItem("token");
         const isValid = this.formValidation();
         if (isValid) {
-            axios.put('https://movie-app-alex-offner.herokuapp.com/users/' + this.props.user,
+            axios.put('https://movie-app-alex-offner.herokuapp.com/users/' + user,
                 {
                     username: this.state.username,
                     password: this.state.password,
@@ -89,7 +89,7 @@ export class ProfileView extends React.Component {
         if (confirmAction) {
             let token = localStorage.getItem("token");
             let user = localStorage.getItem("user");
-            axios.delete('https://movie-app-alex-offner.herokuapp.com/users/' + this.props.user,
+            axios.delete('https://movie-app-alex-offner.herokuapp.com/users/' + user,
                 { headers: { Authorization: `Bearer ${token}` } }
             )
                 .then(() => {
@@ -113,8 +113,11 @@ export class ProfileView extends React.Component {
             .then((response) => {
                 console.log(response);
                 alert(movie.Title + " has been removed from your list if favourites!");
-                this.componentDidMount();
+                window.location.pathname = `/users/${user}`
+                /* this.componentDidMount(); */
             })
+
+
 
     }
 
@@ -167,26 +170,27 @@ export class ProfileView extends React.Component {
     }
 
     render() {
-        const { movies, newUser } = this.props;
+        const { movies, user } = this.props;
         const { usernameErr, passwordErr, emailErr } = this.state;
         // console.log(movies);
         const ListOfFavouriteMovies = movies.filter((movie) => {
-            return this.state.user.favouriteMovies.includes(movie._id);
+            return user.favouriteMovies.includes(movie._id);
         });
         // console.log(this.props);
         return (
             <div className="profile-view">
                 <div className="profile-username">
                     <span className="headline">Username: </span>
-                    <span className="title">{this.state.user.username}</span>
+                    <span className="title">{user.username}</span>
                 </div>
                 <div className="profile-email">
                     <span className="headline">Email: </span>
-                    <span className="title">{this.state.user.email}</span>
+                    <span className="title">{user.email}</span>
                 </div>
+
                 <div className="profile-birthday">
                     <span className="headline">Birthday: </span>
-                    <span className="title">{this.state.user.birthday}</span>
+                    <span className="title">{user.birthday}</span>
                 </div>
                 <br></br>
                 <Card.Text className="mt-200" as="h3">Favourite Movies:</Card.Text>
@@ -282,5 +286,25 @@ let mapStateToProps = state => {
 
 export default connect(mapStateToProps, { setNewUser })(ProfileView);
 
-/* ProfileView.propTypes = {
-} */
+ProfileView.propTypes = {
+    user: PropTypes.shape({
+        username: PropTypes.string.isRequired,
+        password: PropTypes.string.isRequired,
+        email: PropTypes.string.isRequired,
+        birthday: PropTypes.string
+    }).isRequired,
+    token: PropTypes.string.isRequired,
+    movies: PropTypes.arrayOf(PropTypes.shape({
+        Title: PropTypes.string.isRequired,
+        Description: PropTypes.string.isRequired,
+        ImagePath: PropTypes.string.isRequired,
+        Director: PropTypes.shape({
+            Name: PropTypes.string
+        }).isRequired,
+        Drama: PropTypes.shape({
+            Name: PropTypes.string
+        })
+    })).isrequired,
+    onLoggedIn: PropTypes.func.isRequired,
+    onBackClick: PropTypes.func.isRequired,
+}

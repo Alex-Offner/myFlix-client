@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './login-view.scss';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 
 import { Link } from "react-router-dom";
 
@@ -71,14 +72,6 @@ export function LoginView(props) {
 
     }
 
-    /*     const moveToSignUp = (e) => {
-            e.preventDefault();
-            console.log('Moving to registration!');
-            props.onLoggedIn(true);
-            props.onRegistered(null);
-        } */
-
-
     return (
         <Form ref={this.Form} className="centered">
             <h1>myFlix Login</h1>
@@ -114,4 +107,8 @@ export function LoginView(props) {
             </div>
         </Form>
     );
+}
+
+LoginView.propTypes = {
+    onLoggedIn: PropTypes.func.isRequired,
 }

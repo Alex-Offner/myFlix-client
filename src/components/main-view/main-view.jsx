@@ -47,6 +47,7 @@ export class MainView extends React.Component {
                 token: localStorage.getItem('token')
             });
             this.getMovies(accessToken);
+            this.getUser(accessToken);
             /*             this.getUser(accessToken); */
         }
     }
@@ -57,7 +58,7 @@ export class MainView extends React.Component {
         })
             .then(response => {
                 this.props.setMovies(response.data);
-                console.log(response.data)
+                /* console.log(response.data) */
                 /*             this.setState({
                                                     movies: response.data
                             }); */
@@ -67,44 +68,48 @@ export class MainView extends React.Component {
             });
     }
 
-    /*     getUser(token) {
-            axios.get('https://movie-app-alex-offner.herokuapp.com/users/' + localStorage.getItem('user'), {
-                headers: { Authorization: `Bearer ${token}` }
+    getUser(token) {
+        axios.get('https://movie-app-alex-offner.herokuapp.com/users/' + localStorage.getItem('user'), {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+            .then(response => {
+                this.props.setUser(response.data);
+                /* console.log(response.data) */
             })
-                .then(response => {
-                    this.props.setUser(response.data);
-                    console.log(response.data)
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        } */
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
 
     onLoggedIn(authData) {
         console.log(authData);
-        /*         this.props.setUser(authData.user); */
-        this.setState({
-            user: authData.user.username
-        });
+        this.props.setUser(authData.user);
+        /*    this.setState({
+               user: authData.user.username
+           }); */
 
         localStorage.setItem('token', authData.token);
         localStorage.setItem('user', authData.user.username);
         this.getMovies(authData.token);
+        this.props.getUser(authData.user);
+        window.open(`/movies`, '_self');
     }
 
     onLoggedOut() {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        /*         this.props.setUser(null); */
-        this.setState({
-            user: null
-        });
+        this.props.setUser(null);
+        window.open(`/`, '_self');
+        /*         this.setState({
+                    user: null
+                }); */
     }
 
     render() {
         //object destruction for const movies = this.state.movies
-        const { userData, user, token } = this.state;
-        let { movies, visibilityFilter, /* user */ } = this.props;
+        const { token } = this.state;
+        let { movies, visibilityFilter, user } = this.props;
+
 
         return (
             <Router>
@@ -112,15 +117,15 @@ export class MainView extends React.Component {
                 <Navbar fixed="top" bg="primary" variant="dark">
                     <Navbar.Brand href="/">MyFlix</Navbar.Brand>
                     <Nav className="ml-auto">
-                        {user &&
+                        {user.username ? (
                             <Form className="form-inline my-2 my-lg-0">
                                 <VisibilityFilterInput visibilityFilter={visibilityFilter} />
-                            </Form>
+                            </Form>) : null
                         }
-                        {user && <Nav.Link href="/">Movies</Nav.Link>}
-                        {user && <Nav.Link href={`/users/${this.state.user}`}>User profile</Nav.Link>}
-                        {!user && <Nav.Link href="register">Register</Nav.Link>}
-                        {user === null ?
+                        {user.username ? (<Nav.Link href="/">Movies</Nav.Link>) : null}
+                        {user.username ? (<Nav.Link href={`/users/${user.username}`}>User profile</Nav.Link>) : null}
+                        {!user.username && <Nav.Link href="/register">Register</Nav.Link>}
+                        {!user.username ?
                             <Nav.Link href="/">Log in</Nav.Link> :
                             <Nav.Link href="#logout" onClick={() => this.onLoggedOut(null)}>Sign out</Nav.Link>}
                     </Nav>
@@ -128,28 +133,23 @@ export class MainView extends React.Component {
 
                 <Row className="main-view justify-content-md-center">
                     <Route exact path="/" render={() => {
-                        if (!user) return <Col md={5}>
+                        if (user === null || user.length <= 0) return <Col md={5}>
                             <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
                         </Col>
-                        if (movies.length === 0) return (
+                        if (movies.length === 0 || movies === null) return (
                             <div className="main-view" />
                         )
-                        /*                         return movies.map(m => (
-                                                    <Col md={3} key={m._id}>
-                                                        <MovieCard movie={m} />
-                                                    </Col>
-                                                )) */
                         return <MoviesList movies={movies} />;
                     }} />
 
                     <Route path="/register" render={() => {
-                        if (user) return <Redirect to="/" />
+                        if (user.username) return <Redirect to="/" />
                         return <Col md={5}>
                             <RegistrationView />
                         </Col>
                     }} />
                     <Route exact path="/movies/:movieId" render={({ match, history }) => {
-                        if (!user) return <Col>
+                        if (!user.username) return <Col>
                             <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
                         </Col>
                         if (movies.length === 0) return (
@@ -161,7 +161,7 @@ export class MainView extends React.Component {
                     }} />
 
                     <Route path="/director/:name" render={({ match, history }) => {
-                        if (!user) return <Col>
+                        if (!user.username) return <Col>
                             <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
                         </Col>
                         if (movies.length === 0) return (
@@ -173,7 +173,7 @@ export class MainView extends React.Component {
                     }} />
 
                     <Route path="/genre/:name" render={({ match, history }) => {
-                        if (!user) return <Col>
+                        if (!user.username) return <Col>
                             <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
                         </Col>
                         if (movies.length === 0) return (
@@ -184,8 +184,8 @@ export class MainView extends React.Component {
                         </Col>
                     }} />
 
-                    <Route path={`/users/${this.state.user}`} render={({ match, history }) => {
-                        if (!user) return <Col>
+                    <Route path={`/users/${user.username}`} render={({ history }) => {
+                        if (!user.username) return <Col>
                             <LoginView onLoggedIn={user => this.onLoggedIn(user)} />
                         </Col>
                         return (
@@ -204,10 +204,11 @@ let mapStateToProps = state => {
     const { visibilityFilter } = state;
     return {
         movies: state.movies,
+        user: state.user,
         visibilityFilter
     }
 }
 
 
 //allows to export a default value, but only one is possible in the application
-export default connect(mapStateToProps, { setMovies })(MainView);
+export default connect(mapStateToProps, { setMovies, setUser })(MainView);
