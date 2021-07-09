@@ -10,36 +10,36 @@ The app is responsive and runs on multible devices.
 #Overview
   
   ## MainView
-  *Returns a list of all avaiable movies to the user
-  *User can click on a movie to get more information
-  *Navbar helps to coordinate and set to different views
-  *Searchbar allows user to filter movies
+  * Returns a list of all avaiable movies to the user
+  * User can click on a movie to get more information
+  * Navbar helps to coordinate and set to different views
+  * Searchbar allows user to filter movies
   
   
   ## RegistrationView
-  *Allows user to register with a username,password, email and a birthday (optional)
+  * Allows user to register with a username,password, email and a birthday (optional)
   
   ## LoginView
-  *Allows registered users to login with their username and password
+  * Allows registered users to login with their username and password
   
   ## MovieCard
-  *Gives the user more information of a movie (like description, genre, director)
-  *Allows the user to add a movie to their favourites list
+  * Gives the user more information of a movie (like description, genre, director)
+  * Allows the user to add a movie to their favourites list
   
   ## Director/Genre view
-  *Gives more information about director or genre (Description/Bio)
+  * Gives more information about director or genre (Description/Bio)
   
   ## ProfileView
-  *Allows the user to see his userdata (username, email, birthday)
-  *Allows the user to change his data (username, password, email, birthday) 
-  *Display a list of favourite movies, where the user can remove selected movies
-  *Allows user to delete their profile
+  * Allows the user to see his userdata (username, email, birthday)
+  * Allows the user to change his data (username, password, email, birthday) 
+  * Display a list of favourite movies, where the user can remove selected movies
+  * Allows user to delete their profile
   
   
   # Stack, Dependencies, Parcel
   
   ## Stack
-  *The complete project was developed using the MERN (MongoDB, Express.js, React.js, Node.js) stack
+  * The complete project was developed using the MERN (MongoDB, Express.js, React.js, Node.js) stack
   
   ## Dependencies
     "axios": "^0.21.1",
@@ -54,5 +54,5 @@ The app is responsive and runs on multible devices.
     "redux-devtools-extension": "^2.13.9"
   
   ## Parcel
-  *Parcel path for hosting locally: src/index.html
+  * Parcel path for hosting locally: src/index.html
 
