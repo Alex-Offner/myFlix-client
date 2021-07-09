@@ -7,7 +7,7 @@ The user can view a list of different movies, get information on them and learn 
 The app is responsive and runs on multible devices.
 <p>
   
-#Overview
+# Overview
   
   ## MainView
   * Returns a list of all avaiable movies to the user
