@@ -7,30 +7,17 @@ import axios from 'axios';
 import { Form, FormControl, Card, Row, Col } from 'react-bootstrap';
 
 import { connect } from 'react-redux';
-import { setNewUser } from '../../actions/actions';
+import { setUser } from '../../actions/actions';
 
 import { Link } from 'react-router-dom';
-/* import { propTypes } from 'react-bootstrap/esm/Image'; */
 
 export class ProfileView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            /*             user: {
-                            username: "",
-                            password: "",
-                            birthday: "",
-                            email: "",
-                            _id: "",
-                            favouriteMovies: [],
-            
-                        }, */
             usernameErr: "",
             passwordErr: "",
             emailErr: "",
-            /*             username: "",
-                        password: "",
-                        email: "" */
         };
     }
 
@@ -279,7 +266,7 @@ let mapStateToProps = state => {
     return { newUser: state.newUser }
 }
 
-export default connect(mapStateToProps, { setNewUser })(ProfileView);
+export default connect(mapStateToProps, { setUser })(ProfileView);
 
 ProfileView.propTypes = {
     user: PropTypes.shape({
