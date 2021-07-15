@@ -1,7 +1,7 @@
 import React from 'react';
 import Col from 'react-bootstrap/Col';
 import { connect } from 'react-redux';
-import PropTypes from 'react-bootstrap/esm/Image';
+import PropTypes from 'prop-types';
 
 import { MovieCard } from '../movie-card/movie-card';
 

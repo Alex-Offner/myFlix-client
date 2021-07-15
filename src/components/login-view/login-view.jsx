@@ -11,17 +11,17 @@ import Button from 'react-bootstrap/Button';
 export function LoginView(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
     //the following const are to set states for form validation
     const [usernameErr, setUsernameErr] = useState({});
     const [passwordErr, setPasswordErr] = useState({});
-    const [userExists, setuserExists] = useState({});
+    //This code tells user if there password or username was wrong, but produces an error message, that still needs to be fixed
+    /*  const [userExists, setuserExists] = useState({}); */
 
     const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = formValidation();
-        // console.log(username, password);
-        // props.onLoggedIn(username);
-        // props.onRegistered(username);
+
         axios.post('https://movie-app-alex-offner.herokuapp.com/login', {
             username: username,
             password: password
@@ -31,14 +31,15 @@ export function LoginView(props) {
                 props.onLoggedIn(data);
             })
             .catch(e => {
-                console.log("The user doesn't exist!");
-                const userExists = {};
-                if (isValid) {
-                    userExists.userdoesnotexist = "User doesn't exist. Please check your spelling or register.";
-                    setuserExists(userExists);
-                } else {
-                    delete setuserExists(userExists);
-                }
+                //This code tells user if there password or username was wrong, but produces an error message, that still needs to be fixed
+                /*                 console.log("An error occured when trying to log in!"); */
+                /*                 const userExists = {};
+                                if (isValid) {
+                                    userExists.userdoesnotexist = "Username or password incorrect. Please check your spelling.";
+                                    setuserExists(userExists);
+                                } else {
+                                    delete setuserExists(userExists);
+                                } */
 
             });
     };
@@ -73,7 +74,7 @@ export function LoginView(props) {
     }
 
     return (
-        <Form ref={this.Form} className="centered">
+        <Form className="centered">
             <h1>myFlix Login</h1>
             <Form.Group controlId="formUsername">
                 <Form.Label>Username:</Form.Label>
@@ -89,9 +90,10 @@ export function LoginView(props) {
             {Object.keys(passwordErr).map((key) => {
                 return <div key={key} style={{ color: "red" }}>{passwordErr[key]}</div>
             })}
-            {Object.keys(userExists).map((key) => {
+            {/*This code tells user if there password or username was wrong, but produces an error message, that still needs to be fixed */}
+            {/*             {Object.keys(userExists).map((key) => {
                 return <div key={key} style={{ color: "red" }}>{userExists[key]}</div>
-            })}
+            })} */}
             <div className="button">
                 <Button variant="primary" type="submit" onClick={handleSubmit}>
                     Submit

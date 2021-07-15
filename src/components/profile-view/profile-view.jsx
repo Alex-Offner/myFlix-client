@@ -1,5 +1,6 @@
 import React from 'react';
-import PropTypes, { string } from 'prop-types';
+/* import PropTypes, { string } from 'prop-types'; */
+import PropTypes from 'prop-types';
 import './profile-view.scss';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
@@ -9,7 +10,7 @@ import { connect } from 'react-redux';
 import { setNewUser } from '../../actions/actions';
 
 import { Link } from 'react-router-dom';
-import { propTypes } from 'react-bootstrap/esm/Image';
+/* import { propTypes } from 'react-bootstrap/esm/Image'; */
 
 export class ProfileView extends React.Component {
     constructor(props) {
@@ -200,7 +201,7 @@ export class ProfileView extends React.Component {
                             <Col md={3} key={movie._id}>
                                 <div key={movie._id}>
                                     <Card>
-                                        <Card.Img variant="top" src={movie.ImagePath} />
+                                        <Card.Img className="card-img" variant="top" src={movie.ImagePath} />
                                         <Card.Body>
                                             <Link to={`/movies/${movie._id}`}>
                                                 <Card.Title>{movie.Title}</Card.Title>
@@ -254,15 +255,9 @@ export class ProfileView extends React.Component {
                         >
                             Save changes
                         </Button>
-
-                        <br></br>
-                        <br></br>
                         <Link to={`/`}>
-                            <Button variant="info">Back</Button>
+                            <Button className="mb-2" variant="info">Back</Button>
                         </Link>
-                        <br></br>
-                        <br></br>
-                        <br></br>
                         <Button className="mb-2" variant="danger"
                             size="md"
                             onClick={() => this.handleDelete()}
@@ -304,7 +299,7 @@ ProfileView.propTypes = {
         Drama: PropTypes.shape({
             Name: PropTypes.string
         })
-    })).isrequired,
+    })).isRequired,
     onLoggedIn: PropTypes.func.isRequired,
     onBackClick: PropTypes.func.isRequired,
 }

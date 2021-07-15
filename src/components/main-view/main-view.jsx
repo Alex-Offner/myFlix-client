@@ -5,9 +5,7 @@ import { connect } from 'react-redux';
 
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 
-import { setMovies } from '../../actions/actions';
-import { setUser } from '../../actions/actions';
-
+import { setMovies, setUser } from '../../actions/actions';
 
 import MoviesList from '../movies-list/movies-list';
 import { LoginView } from '../login-view/login-view';
@@ -19,8 +17,6 @@ import { ProfileView } from '../profile-view/profile-view';
 import VisibilityFilterInput from '../visibility-filter-input/visibility-filter-input';
 
 import { Row, Col, Navbar, Nav, Form } from 'react-bootstrap';
-/* import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button'; */
 
 import './main-view.scss';
 
@@ -32,7 +28,6 @@ export class MainView extends React.Component {
         //super calls constructor on parent class (in this case "React.Component")
         super();
         this.state = {
-            /* user: null, */
             userData: null,
             token: null,
             users: null
