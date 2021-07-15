@@ -1,0 +1,42 @@
+.add-movie-button {
+    margin-right: 2%;
+}
+
+.movie-view {
+/*     max-width: 100%; */
+    font-size: x-large;
+}
+
+.movie-poster {
+    width: 250%;
+}
+
+.movie-img {
+    margin-top: 1%;
+}
+
+@media only screen and (max-width: 1000px) and (min-width: 768px) {
+    .movie-view {
+        margin-top: 15%;
+    }
+    .movie-poster {
+        width: 500%;
+    }
+}
+
+@media only screen and (max-width: 767px) and (min-width: 430px) {
+    .movie-view {
+        margin-top: 10%;
+        max-width: 300%;
+    }
+}
+
+@media only screen and (max-width: 430px) {
+    .movie-view {
+        margin-top: 20%;
+        font-size: xx-large;
+    }
+    .movie-poster {
+        width: 500%;
+    }
+}

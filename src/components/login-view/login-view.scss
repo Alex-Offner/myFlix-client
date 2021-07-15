@@ -1,0 +1,35 @@
+.centered {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-60%, -60%);
+    width: 60%;
+    height: 60%;
+}
+
+p {
+    text-align: center;
+}
+
+.button {
+text-align: center;
+margin-top: 5px;
+}
+
+@media only screen and (max-width: 1000px) and (min-width: 768px) {
+    .centered {
+        margin-top: 15%;
+    }
+}
+
+@media only screen and (max-width: 767px) and (min-width: 430px) {
+    .centered {
+        margin-top: 10%;
+    }
+}
+
+@media only screen and (max-width: 430px) {
+    .centered {
+        margin-top: 25%;
+    }
+}

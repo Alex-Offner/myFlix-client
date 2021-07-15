@@ -1,0 +1,35 @@
+.profile-form {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-60%, +100%);
+    width: 60%;
+    height: 60%;
+}
+
+.profile-view {
+    margin-top: 0%;
+}
+
+@media only screen and (max-width: 1000px) and (min-width: 768px) {
+    .profile-view {
+        margin-top: 15%;
+    }
+}
+
+@media only screen and (max-width: 767px) and (min-width: 430px) {
+    .profile-view {
+        margin-top: 10%;
+    }
+
+}
+
+@media only screen and (max-width: 430px) {
+    .profile-view {
+        margin-top: 25%;
+    }
+}
+
+.mb-2 {
+    margin: 2px;
+}
