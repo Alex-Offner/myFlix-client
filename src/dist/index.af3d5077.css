@@ -40,6 +40,44 @@
     width: 500%;
   }
 }
+.movie-card-img {
+  max-width: 70%;
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1%;
+}
+
+.card {
+  margin-top: 1%;
+  margin-bottom: 2%;
+}
+
+.movie-card-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 20ch;
+}
+
+@media only screen and (max-width: 1000px) and (min-width: 768px) {
+  .card {
+    margin-top: 15%;
+  }
+}
+@media only screen and (max-width: 767px) and (min-width: 430px) {
+  .card {
+    margin-top: 10%;
+  }
+}
+@media only screen and (max-width: 430px) {
+  .card {
+    margin-top: 25%;
+  }
+}
 .centered {
   position: absolute;
   left: 50%;
@@ -96,13 +134,6 @@ p {
     margin-top: 25%;
   }
 }
-.main-view {
-  margin-top: 8%;
-}
-
-.navbar {
-  margin-bottom: 50px;
-}
 
 
 .profile-form {
@@ -136,43 +167,12 @@ p {
 .mb-2 {
   margin: 2px;
 }
-.movie-card-img {
-  max-width: 70%;
-  height: auto;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 1%;
+.main-view {
+  margin-top: 8%;
 }
 
-.card {
-  margin-top: 1%;
-  margin-bottom: 2%;
-}
-
-.movie-card-text {
-  display: -webkit-box;
-  -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-height: 20ch;
-}
-
-@media only screen and (max-width: 1000px) and (min-width: 768px) {
-  .card {
-    margin-top: 15%;
-  }
-}
-@media only screen and (max-width: 767px) and (min-width: 430px) {
-  .card {
-    margin-top: 10%;
-  }
-}
-@media only screen and (max-width: 430px) {
-  .card {
-    margin-top: 25%;
-  }
+.navbar {
+  margin-bottom: 50px;
 }
 .my-flix {
   color: steelblue;
